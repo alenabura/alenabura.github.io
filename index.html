@@ -1,31 +1,52 @@
-document.getElementById("testForm").addEventListener("submit", async (e) => {
-  e.preventDefault();
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест</title>
+</head>
+<body>
+    <h1>Пройди тест</h1>
+    <form id="testForm">
+        <p>Вопрос 1: <input type="checkbox" name="q1"></p>
+        <p>Вопрос 2: <input type="checkbox" name="q2"></p>
+        <p>Вопрос 3: <input type="checkbox" name="q3"></p>
+        <p>Вопрос 4: <input type="checkbox" name="q4"></p>
+        <p>Вопрос 5: <input type="checkbox" name="q5"></p>
+        <button type="submit">Отправить</button>
+    </form>
+    <script>
+        document.getElementById("testForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-  const formData = {
-    user: "Anonymous",
-    q1: document.querySelector('input[name="q1"]').checked,
-    q2: document.querySelector('input[name="q2"]').checked,
-    q3: document.querySelector('input[name="q3"]').checked,
-    q4: document.querySelector('input[name="q4"]').checked,
-    q5: document.querySelector('input[name="q5"]').checked,
-  };
+            const formData = {
+                user: "Anonymous",
+                q1: document.querySelector('input[name="q1"]').checked,
+                q2: document.querySelector('input[name="q2"]').checked,
+                q3: document.querySelector('input[name="q3"]').checked,
+                q4: document.querySelector('input[name="q4"]').checked,
+                q5: document.querySelector('input[name="q5"]').checked,
+            };
 
-  try {
-    const response = await fetch("https://my-deno-test.deno.dev/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+            try {
+                const response = await fetch("https://my-deno-test.deno.dev/submit", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
 
-    if (response.ok) {
-      alert("Тест успешно отправлен!");
-    } else {
-      alert("Ошибка при отправке теста.");
-    }
-  } catch (error) {
-    console.error("Ошибка:", error);
-    alert("Произошла ошибка при отправке теста.");
-  }
-});
+                if (response.ok) {
+                    alert("Тест успешно отправлен!");
+                } else {
+                    alert("Ошибка при отправке теста.");
+                }
+            } catch (error) {
+                console.error("Ошибка:", error);
+                alert("Произошла ошибка при отправке теста.");
+            }
+        });
+    </script>
+</body>
+</html>
