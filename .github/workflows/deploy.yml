@@ -1,0 +1,20 @@
+name: Deploy to Deno Deploy
+
+on:
+  push:
+    branches:
+      - main  # Убедитесь, что здесь указана ваша основная ветка (main или master)
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Deno Deploy
+        uses: denoland/deployctl@v1
+        with:
+          project: "alenabura-alenaburagi-66"  # Укажите имя вашего проекта в Deno Deploy
+          entrypoint: "mod.ts"  # Укажите точку входа вашего приложения
