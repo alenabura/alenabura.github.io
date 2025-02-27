@@ -17,7 +17,7 @@ serve(async (req) => {
   if (req.method === "POST" && url.pathname === "/submit") {
     try {
       const data = await req.json();
-      console.log("Received data:", data);
+      console.log("Received data:", data); // Логируем полученные данные
 
       // Отправляем данные в Google Apps Script
       const response = await fetch(GOOGLE_SCRIPT_URL, {
@@ -27,7 +27,7 @@ serve(async (req) => {
       });
 
       const result = await response.text();
-      console.log("Google Script response:", result);
+      console.log("Google Script response:", result); // Логируем ответ от Google Apps Script
 
       return new Response(result, {
         headers: { "Content-Type": "application/json" },
