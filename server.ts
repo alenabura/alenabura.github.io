@@ -5,28 +5,43 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuLbIgWLR232
 serve(async (req) => {
   const url = new URL(req.url);
 
+  // Возвращаем HTML-страницу при GET-запросе на корневой путь
   if (req.method === "GET" && url.pathname === "/") {
-    // Возвращаем HTML-страницу
     const html = await Deno.readTextFile("./index.html");
     return new Response(html, {
       headers: { "Content-Type": "text/html" },
     });
   }
 
+  // Обрабатываем POST-запросы на /submit
   if (req.method === "POST" && url.pathname === "/submit") {
-    const data = await req.json();
-    console.log("Received data:", data); // Логируем полученные данные
+    try {
+      const data = await req.json();
+      console.log("Received data:", data);
 
-    const response = await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+      // Отправляем данные в Google Apps Script
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
 
-    console.log("Google Script response:", await response.text()); // Логируем ответ от Google Apps Script
-    return new Response(await response.text(), { headers: { "Content-Type": "application/json" } });
+      const result = await response.text();
+      console.log("Google Script response:", result);
+
+      return new Response(result, {
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      console.error("Error:", error);
+      return new Response(JSON.stringify({ error: "Internal Server Error" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
   }
 
+  // Возвращаем 404 для всех остальных запросов
   return new Response("Not Found", { status: 404 });
 });
 
