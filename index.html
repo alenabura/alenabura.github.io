@@ -17,8 +17,37 @@
     </form>
     <script>
         document.getElementById("testForm").addEventListener("submit", async (e) => {
-            e.preventDefault();
-            alert("Тест отправлен!");
+            e.preventDefault(); // Предотвращаем стандартное поведение формы
+
+            // Собираем данные из формы
+            const formData = {
+                user: "Anonymous", // Или можно добавить поле для ввода имени
+                q1: document.querySelector('input[name="q1"]').checked,
+                q2: document.querySelector('input[name="q2"]').checked,
+                q3: document.querySelector('input[name="q3"]').checked,
+                q4: document.querySelector('input[name="q4"]').checked,
+                q5: document.querySelector('input[name="q5"]').checked,
+            };
+
+            try {
+                // Отправляем данные на сервер Deno Deploy
+                const response = await fetch("https://ВАШ_DENO_DEPLOY_URL", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(formData),
+                });
+
+                if (response.ok) {
+                    alert("Тест успешно отправлен!");
+                } else {
+                    alert("Ошибка при отправке теста.");
+                }
+            } catch (error) {
+                console.error("Ошибка:", error);
+                alert("Произошла ошибка при отправке теста.");
+            }
         });
     </script>
 </body>
