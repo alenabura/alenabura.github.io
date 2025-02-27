@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std/http/server.ts";
 
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyuLbIgWLR2328kCjmczAHYF1-ef5lNvGwdUHLSZCou1YAXXOnKJVmalwbaBTluPCU7oQ/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwlU-O0aZfTBkX9wosj7cLKpNodNL4i4V0iO27dbwuWdIZXgGZ_aZJ0ShMfoIjeJqQBYg/exec";
 
 serve(async (req) => {
   const url = new URL(req.url);
