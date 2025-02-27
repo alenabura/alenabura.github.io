@@ -3,7 +3,7 @@ name: Deploy to Deno Deploy
 on:
   push:
     branches:
-      - main  # Убедитесь, что здесь указана ваша основная ветка (main или master)
+      - main  # Ð£Ð±ÐµÐ´Ð¸ÑÐµÑÑ, ÑÑÐ¾ Ð·Ð´ÐµÑÑ ÑÐºÐ°Ð·Ð°Ð½Ð° Ð²Ð°ÑÐ° Ð¾ÑÐ½Ð¾Ð²Ð½Ð°Ñ Ð²ÐµÑÐºÐ° (main Ð¸Ð»Ð¸ master)
 
 jobs:
   deploy:
@@ -16,5 +16,5 @@ jobs:
       - name: Deploy to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "alenabura-alenaburagi-66"  # Укажите имя вашего проекта в Deno Deploy
-          entrypoint: "mod.ts"  # Укажите точку входа вашего приложения
+          project: "alenabura-alenaburagi-66"  # Ð£ÐºÐ°Ð¶Ð¸ÑÐµ Ð¸Ð¼Ñ Ð²Ð°ÑÐµÐ³Ð¾ Ð¿ÑÐ¾ÐµÐºÑÐ° Ð² Deno Deploy
+          entrypoint: "mod.ts"  # Ð£ÐºÐ°Ð¶Ð¸ÑÐµ ÑÐ¾ÑÐºÑ Ð²ÑÐ¾Ð´Ð° Ð²Ð°ÑÐµÐ³Ð¾ Ð¿ÑÐ¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ
