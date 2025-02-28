@@ -26,6 +26,19 @@
       display: block;
       margin: 5px 0;
     }
+    /* Стили для модальной плашки */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px;
+      border-radius: 5px;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
   </style>
 </head>
 <body>
@@ -121,6 +134,9 @@
 
     <button id="nextArtButton" style="display: none;" onclick="nextArt()">Следующая картина</button>
   </div>
+
+  <!-- Модальная плашка для уведомлений -->
+  <div id="modal" class="modal"></div>
 
   <!-- Скрипт для логики переключения и сбора данных -->
   <script>
@@ -327,9 +343,19 @@
         renderArtRating();
         document.getElementById("nextArtButton").style.display = "none";
       } else {
-        // Если картины закончились, завершаем тест
-        alert("Оценка произведений искусства завершена!");
+        // Если картины закончились, завершаем тест и отправляем данные
+        submitAllData();
       }
+    }
+
+    // Функция для отображения модальной плашки
+    function showModal(message, duration = 3000) {
+      const modal = document.getElementById("modal");
+      modal.textContent = message;
+      modal.style.display = "block";
+      setTimeout(() => {
+        modal.style.display = "none";
+      }, duration);
     }
 
     // Финальная отправка всех данных
@@ -347,13 +373,13 @@
         });
 
         if (response.ok) {
-          alert("Данные успешно отправлены! Спасибо за участие.");
+          showModal("Данные успешно отправлены! Спасибо за участие.");
         } else {
-          alert("Ошибка при отправке данных.");
+          showModal("Ошибка при отправке данных.", 5000);
         }
       } catch (error) {
         console.error("Ошибка:", error);
-        alert("Произошла ошибка при отправке.");
+        showModal("Произошла ошибка при отправке.", 5000);
       }
     }
   </script>
