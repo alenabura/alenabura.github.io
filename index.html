@@ -76,60 +76,20 @@
   </div>
 
   <!-- Раздел 3: Инструкция к тесту включённых фигур -->
- <div id="testRule">
-    <div id="trInfo" class="testRunInfo">
-        <div class="tauad">
-            <p>Автор: К. У. Эттрих (1970)</p>
-            <p>Адаптация: И. П. Шкуратова (1983)</p>
-        </div>
-        <div class="testRunNote">
-            смотрите <a href="/cogn/eft.html">описание</a> методики
-        </div>
-    </div>
-    
-    <div class="lntitle">
-        <div class="lntitle_line"> </div>
-        <div class="lntitle_text">Инструкция</div>
-        <div class="lntitle_line"> </div>
-    </div>
-    
-    <div id="Rules" class="testRules">
-        <p>Вам будут предъявлены сложные фигуры (изображения), в каждой из которых имеется один из простых эталонов.</p>
-        <p>Вы должны найти в каждом случае, какой из этих элементов содержится в рисунке, и указать его.</p>
-        <br>
-        <p>В каждом сложном рисунке имеется один из следующих элементов:</p>
-        
-        <div class="eftF" style="margin: 10px 0px 10px 0px; justify-content: start;">
-            <img style="max-width: 120px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAACgAgMAAAAa1OqoAAAACVBMVEUAAAAAAAD///+D3c/SAAAAAXRSTlMAQObYZgAAANVJREFUeAHt2KEVwmAAxOBWMEL36QgIQDAC+zBCRTslojImv+vj5XzEZ29qrbUL7jm6M5uHu/XsPsfY9rq6urq6urq6urq6uv/u6urq8DO8D2znz8Bf48Vu46/BLey+k9iN3IfpZgD3+2QG4LaqbrE8ACUPQMkDUPIAtDwAJQ9AyQNQ8gC0PAAlD0DJA1DyALQ8ACUPQMkDUPIAtDwAPQ9A8DyQPAckzwHJU0DyHJA8ByTPAclTQPIckDwHJM8ByVNA8hyQPAckzwHJc0Dw5MC78Fpr7Qda4K1NaKYGuAAAAABJRU5ErkJggg==" alt="">
-            <img style="max-width: 120px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAACgAgMAAAAa1OqoAAAACVBMVEUAAAAAAAD///+D3c/SAAAAAXRSTlMAQObYZgAAAUZJREFUeAHs2LEZQDAUhVEKI9jHCClEYQT7GEEhU5rgnU53//5+nKTLlFJKKf3X2qs27npZ02w+R9Wu3XKVu5u8UfYIeNS7t5lnoHkGmmegeQaaZ6B5BpoHoHgAkgcgeQCSB6B4AJIHIHkAkgegeACSByB5AJIHoHgAkgcgeQCSByB4AIIHIHgAggcgeACCByB4AIJnIHgEgkcgeASCZyB4BIJHIHgEgmcgeASCRyB4BIpnoHkGggcgvocdfPpPnCfPBffnewCQPADJA5A8AMUDkDwAyQOQPADFA5A8AMkDkDwAxQOQPADJA5A8AMUDkDwAyQOQPADFA5A8AMkDkDwBzTPQPAPNM9A8A8EjEDwCwSMQPAPBIxA8AsETEDwAwQMQPADBAxA8AMEDEDwAwQMQPADBAxA8APlOC2C5y5t5SimlbzQEAMRp1BQZeQWSAAAAAElFTkSuQmCC" alt="">
-        </div>
-        
-        <p>Укажите в каждом случае, какой из этих элементов содержится в рисунке. Например:</p>
-        
-        <div id="xx2" style="margin: 10px 0px 10px 0px;">
-            <img onclick="ui('xx3'); ui('xx2', 'none'); document.getElementById('imd').style.backgroundColor='#00CCFF33';" 
-                 src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPkAAADaAQAAAABMDNmlAAACPklEQVR4AWL4DwfzAe3XAaYdMRiG4QIXkA2U6C6KS5Y2RRnArKmCKWi3cONsIAMEMX+Bmw8vHwA1A4iH85L/TDIBz48F7mzAcOByP1EdSAbc2YCxGXCFAdWBZMBdDBibAS0MqA4kA+5iwNgMaGHA6UAyYBYDRhjQHNgdSAbMYsAIA5oDuwPZgFkM6GFAc2B3IBswiwE9DHg5sBtwZwPmZkAPA6oDuwF3NmBuBvQwoDpwOJAdKA94wAMe8GU9CKYDY61+IGhr9SeCc61+RZDis+adwP0po08CY4vPGgTXWtwRVLmiIzhWYyEgN/seBOZqfCHo0ojgJY0I9tW4EdDGAKCNFYE2ItBGANo4NgTaSGAWaQSgA3sgaNpI4JRGADqwVxC4tRGADmxCcK3GgqBKIwBtbEFAGxFoIwJtRKCNCA5pBKADeyKY0oigy98WwWs1BoJdGhGsxh2BDGxCoI0ImjQikEYG0ojgfTVmBN+lEcE3+dsieJPXH4L1vDmQEMip9/cBD3jAfw+6vBQQfBig9xEGctZjg95HCOidKSFoco4S0MaNgByTLQjIMXki0EYEVd7/CNJqDALaSECvGzuCthozAm0EoI09CMhWvhCMkEYCerVEoFd0AneWRgI6bghkKw8EVRoRHDJuALTxCgKylRWBbGVCoI0IkjQSmEXGjYA2ItBGBLKVBUGWRgLaGAT0awtBlUYE2khAxy0I6Jc1Am1EoFuJIEkjgT9FGgn8lq1E8EsaEZzSKACfzYFY4B8CpDT1G4IxTgAAAABJRU5ErkJggg==" 
-                 alt="">
-        </div>
-
-        <p><i>(кликните по рисунку, чтобы увидеть правильный ответ)</i></p>
-        
-        <br>
-        <p>Помните:</p>
-        <p>&bull; В каждом рисунке имеется один из элементов приблизительно той же величины<sup>(*)</sup> и так же расположенный, как на образце.</p>
-        <p>&bull; В каждом рисунке имеется только один из элементов.</p>
-        <p>&bull; <b>Время выполнения теста учитывается при расчете результата.</b></p>
-        <br>
-        <p>(*) При прохождении теста на мобильных устройствах размеры образцов будут меньше, чем на фигуре.</p>
-    </div>
-    
-    <div class="stdForm stdRun" id="stdRun">
-        <form action="">
-            <div id="stdRunPrepare"></div>
-            <input type="button" id="stdRunButton" value=" НАЧАТЬ ТЕСТИРОВАНИЕ " onclick="this.disabled = true; runBegin(); this.blur(); return false;">
-        </form>
-    </div>
-</div>
+  <div class="section" id="section3">
+    <h2>Тест включённых фигур</h2>
+    <p>
+      Вам будут предъявлены сложные фигуры (изображения). В каждой из них спрятан один из простых эталонов.
+      Вы должны определить, какой из элементов содержится в рисунке, и указать его.
+    </p>
+    <p>
+      <b>Помните:</b>  
+      - Эталон будет примерно такого же размера и такого же расположения, как в образце.  
+      - В каждом рисунке только один эталон.  
+      - Время выполнения теста учитывается!
+    </p>
+    <button onclick="startFiguresTest()">Начать тест включённых фигур</button>
+  </div>
 
 
   <!-- Раздел 4: Сам тест включённых фигур -->
