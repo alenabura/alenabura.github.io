@@ -1,11 +1,12 @@
-import { serve } from "https://deno.land/std/http/server.ts";
+import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
+// Вставь сюда свой реальный URL из Google Apps Script
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyoVKEbTOi3ur-PkAIzb2-TlQS8f5ePVhxrKBwwKYIenDqCaxh_AvVggDQKoYb7VkjpXA/exec";
 
 serve(async (req) => {
   const url = new URL(req.url);
 
-  // Возвращаем HTML-страницу при GET-запросе на корневой путь
+  // При заходе на "/" отдаем HTML-страницу
   if (req.method === "GET" && url.pathname === "/") {
     const html = await Deno.readTextFile("./index.html");
     return new Response(html, {
@@ -13,11 +14,11 @@ serve(async (req) => {
     });
   }
 
-  // Обрабатываем POST-запросы на /submit
+  // При POST-запросе на "/submit" отправляем данные в Google Apps Script
   if (req.method === "POST" && url.pathname === "/submit") {
     try {
       const data = await req.json();
-      console.log("Received data:", data); // Логируем полученные данные
+      console.log("Получены данные от клиента:", data);
 
       // Отправляем данные в Google Apps Script
       const response = await fetch(GOOGLE_SCRIPT_URL, {
@@ -27,22 +28,22 @@ serve(async (req) => {
       });
 
       const result = await response.text();
-      console.log("Google Script response:", result); // Логируем ответ от Google Apps Script
+      console.log("Ответ от Google Apps Script:", result);
 
       return new Response(result, {
         headers: { "Content-Type": "application/json" },
       });
     } catch (error) {
-      console.error("Error:", error);
-      return new Response(JSON.stringify({ error: "Internal Server Error" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" },
-      });
+      console.error("Ошибка на сервере Deno:", error);
+      return new Response(
+        JSON.stringify({ error: "Internal Server Error" }),
+        { status: 500, headers: { "Content-Type": "application/json" } },
+      );
     }
   }
 
-  // Возвращаем 404 для всех остальных запросов
+  // Если маршрут не найден — возвращаем 404
   return new Response("Not Found", { status: 404 });
 });
 
-console.log("Server running on Deno Deploy...");
+console.log("Сервер запущен на Deno Deploy...");
