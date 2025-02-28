@@ -108,15 +108,18 @@
     <!-- 50/50 картинка рядом с инструкцией -->
     <div id="artInstructionImage" style="margin: 10px 0;"></div>
 
-    <button onclick="goToSection(7)">Начать оценку</button>
+    <button onclick="startArtRatingTest()">Начать оценку</button>
   </div>
 
   <!-- Раздел 7: Оценка произведений искусства -->
   <div class="section" id="section7">
     <h2>Оценка произведений искусства</h2>
     <p>Здесь пример на 2 картины (в реальности у вас 6).</p>
+
+    <!-- Место для динамического вывода картин -->
     <div id="artRatingContainer"></div>
-    <button onclick="submitAllData()">Отправить результаты</button>
+
+    <button id="nextArtButton" style="display: none;" onclick="nextArt()">Следующая картина</button>
   </div>
 
   <!-- Скрипт для логики переключения и сбора данных -->
@@ -214,7 +217,7 @@
         optImg.src = optionSrc;
         optImg.addEventListener("click", () => {
           // Сохраняем выбор
-          surveyData.figuresAnswers[currentFigureIndex] = optIndex; 
+          surveyData.figuresAnswers[currentFigureIndex] = optIndex + 1; // Исправлено: сохраняем номер варианта (1-5)
           // Подсвечиваем выбранную
           grid.querySelectorAll("img").forEach(img => img.classList.remove("selected"));
           optImg.classList.add("selected");
@@ -258,64 +261,74 @@
       }
     });
 
-    // Раздел 7: Оценка произведений искусства
+    // Пример данных для оценки произведений искусства
     const artData = [
       { id: 1, src: "images/art1.jpg" },
       { id: 2, src: "images/art2.jpg" },
     ];
 
-    // При входе в раздел 7 — рендерим эти картины
-    function renderArtRatings() {
+    let currentArtIndex = 0; // Текущая картина
+
+    // Начало теста оценки произведений искусства
+    function startArtRatingTest() {
+      goToSection(7);
+      currentArtIndex = 0; // Начинаем с первой картины
+      renderArtRating();
+    }
+
+    // Рендерим текущую картину
+    function renderArtRating() {
       const container = document.getElementById("artRatingContainer");
       container.innerHTML = "";
 
-      artData.forEach((art, index) => {
-        const artDiv = document.createElement("div");
-        artDiv.style.marginBottom = "20px";
+      const art = artData[currentArtIndex];
+      const artDiv = document.createElement("div");
+      artDiv.style.marginBottom = "20px";
 
-        const title = document.createElement("h3");
-        title.textContent = `Картина №${index + 1}`;
-        artDiv.appendChild(title);
+      const title = document.createElement("h3");
+      title.textContent = `Картина №${currentArtIndex + 1}`;
+      artDiv.appendChild(title);
 
-        const artImg = document.createElement("img");
-        artImg.src = art.src;
-        artImg.style.width = "200px";
-        artDiv.appendChild(artImg);
+      const artImg = document.createElement("img");
+      artImg.src = art.src;
+      artImg.style.width = "200px";
+      artDiv.appendChild(artImg);
 
-        // Радио-кнопки 1-10
-        const ratingDiv = document.createElement("div");
-        for (let i = 1; i <= 10; i++) {
-          const label = document.createElement("label");
-          label.style.marginRight = "5px";
+      // Радио-кнопки 1-10
+      const ratingDiv = document.createElement("div");
+      for (let i = 1; i <= 10; i++) {
+        const label = document.createElement("label");
+        label.style.marginRight = "5px";
 
-          const radio = document.createElement("input");
-          radio.type = "radio";
-          radio.name = "artRating" + index;
-          radio.value = i.toString();
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "artRating" + currentArtIndex;
+        radio.value = i.toString();
 
-          radio.addEventListener("change", () => {
-            surveyData.artRatings[index] = i; // Сохраняем выбранную оценку
-          });
+        radio.addEventListener("change", () => {
+          surveyData.artRatings[currentArtIndex] = i; // Сохраняем выбранную оценку
+          // Показываем кнопку "Следующая картина"
+          document.getElementById("nextArtButton").style.display = "block";
+        });
 
-          label.appendChild(radio);
-          label.appendChild(document.createTextNode(i + " "));
-          ratingDiv.appendChild(label);
-        }
-        artDiv.appendChild(ratingDiv);
+        label.appendChild(radio);
+        label.appendChild(document.createTextNode(i + " "));
+        ratingDiv.appendChild(label);
+      }
+      artDiv.appendChild(ratingDiv);
 
-        container.appendChild(artDiv);
-      });
+      container.appendChild(artDiv);
     }
 
-    // Переопределяем кнопку в разделе 6
-    function goToSection(num) {
-      // Стандартное переключение
-      document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
-      document.getElementById("section" + num).classList.add("active");
-
-      // Доп.логика: если переходим в 7, рендерим картинки
-      if (num === 7) {
-        renderArtRatings();
+    // Переход к следующей картине
+    function nextArt() {
+      currentArtIndex++;
+      if (currentArtIndex < artData.length) {
+        renderArtRating();
+        document.getElementById("nextArtButton").style.display = "none";
+      } else {
+        // Если картины закончились, завершаем тест
+        alert("Оценка произведений искусства завершена!");
       }
     }
 
