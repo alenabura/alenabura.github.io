@@ -19,6 +19,13 @@
     .image-grid img.selected {
       border: 2px solid red; /* Подсветка выбранного */
     }
+    .radio-group {
+      margin: 10px 0;
+    }
+    .radio-group label {
+      display: block;
+      margin: 5px 0;
+    }
   </style>
 </head>
 <body>
@@ -38,25 +45,19 @@
       <input type="number" id="age" />
     </label>
     <br><br>
-    <label>
+    <div class="radio-group">
       Укажите Ваш биологический пол:
-      <select id="gender">
-        <option value="">-- Выберите --</option>
-        <option value="м">Мужской</option>
-        <option value="ж">Женский</option>
-      </select>
-    </label>
-    <br><br>
-    <label>
+      <label><input type="radio" name="gender" value="м"> Мужской</label>
+      <label><input type="radio" name="gender" value="ж"> Женский</label>
+    </div>
+    <br>
+    <div class="radio-group">
       Укажите Ваш уровень образования:
-      <select id="education">
-        <option value="">-- Выберите --</option>
-        <option value="Среднее">Среднее образование</option>
-        <option value="Среднее специальное">Среднее специальное</option>
-        <option value="Студент">Студент</option>
-        <option value="Высшее">Высшее образование</option>
-      </select>
-    </label>
+      <label><input type="radio" name="education" value="Среднее"> Среднее образование</label>
+      <label><input type="radio" name="education" value="Среднее специальное"> Среднее специальное</label>
+      <label><input type="radio" name="education" value="Студент"> Студент</label>
+      <label><input type="radio" name="education" value="Высшее"> Высшее образование</label>
+    </div>
     <br><br>
     <button onclick="saveSection2()">Перейти к следующему разделу</button>
   </div>
@@ -85,7 +86,7 @@
     <!-- Место для динамического вывода фигур -->
     <div id="figureTestContainer"></div>
 
-    <button onclick="finishFiguresTest()">Завершить тест включённых фигур</button>
+    <button id="nextFigureButton" style="display: none;" onclick="nextFigure()">Следующая фигура</button>
   </div>
 
   <!-- Раздел 5: Завершение теста фигур -->
@@ -138,8 +139,8 @@
     // Сохраняем данные раздела 2
     function saveSection2() {
       surveyData.age = document.getElementById("age").value.trim();
-      surveyData.gender = document.getElementById("gender").value;
-      surveyData.education = document.getElementById("education").value;
+      surveyData.gender = document.querySelector('input[name="gender"]:checked')?.value;
+      surveyData.education = document.querySelector('input[name="education"]:checked')?.value;
 
       goToSection(3);
     }
@@ -150,6 +151,7 @@
       surveyData.startFiguresTime = Date.now();
       // Переходим к разделу 4
       goToSection(4);
+      currentFigureIndex = 0; // Начинаем с первой картинки
       renderFiguresTest();
     }
 
@@ -179,48 +181,63 @@
       }
     ];
 
+    let currentFigureIndex = 0; // Текущая картинка
+
     // Рисуем вопросы для теста включённых фигур
     function renderFiguresTest() {
       const container = document.getElementById("figureTestContainer");
       container.innerHTML = "";
 
-      figureTestData.forEach((fig, index) => {
-        const figDiv = document.createElement("div");
-        figDiv.style.border = "1px solid #ccc";
-        figDiv.style.marginBottom = "20px";
-        figDiv.style.padding = "10px";
+      const fig = figureTestData[currentFigureIndex];
+      const figDiv = document.createElement("div");
+      figDiv.style.border = "1px solid #ccc";
+      figDiv.style.marginBottom = "20px";
+      figDiv.style.padding = "10px";
 
-        // Заголовок
-        const title = document.createElement("h3");
-        title.textContent = `Фигура №${index + 1}`;
-        figDiv.appendChild(title);
+      // Заголовок
+      const title = document.createElement("h3");
+      title.textContent = `Фигура №${currentFigureIndex + 1}`;
+      figDiv.appendChild(title);
 
-        // Большая картинка
-        const bigImg = document.createElement("img");
-        bigImg.src = fig.bigImage;
-        bigImg.style.width = "200px";
-        figDiv.appendChild(bigImg);
+      // Большая картинка
+      const bigImg = document.createElement("img");
+      bigImg.src = fig.bigImage;
+      bigImg.style.width = "200px";
+      figDiv.appendChild(bigImg);
 
-        // Сетка с 5 вариантами
-        const grid = document.createElement("div");
-        grid.className = "image-grid";
+      // Сетка с 5 вариантами
+      const grid = document.createElement("div");
+      grid.className = "image-grid";
 
-        fig.options.forEach((optionSrc, optIndex) => {
-          const optImg = document.createElement("img");
-          optImg.src = optionSrc;
-          optImg.addEventListener("click", () => {
-            // Сохраняем выбор
-            surveyData.figuresAnswers[index] = optIndex; 
-            // Подсвечиваем выбранную
-            grid.querySelectorAll("img").forEach(img => img.classList.remove("selected"));
-            optImg.classList.add("selected");
-          });
-          grid.appendChild(optImg);
+      fig.options.forEach((optionSrc, optIndex) => {
+        const optImg = document.createElement("img");
+        optImg.src = optionSrc;
+        optImg.addEventListener("click", () => {
+          // Сохраняем выбор
+          surveyData.figuresAnswers[currentFigureIndex] = optIndex; 
+          // Подсвечиваем выбранную
+          grid.querySelectorAll("img").forEach(img => img.classList.remove("selected"));
+          optImg.classList.add("selected");
+          // Показываем кнопку "Следующая фигура"
+          document.getElementById("nextFigureButton").style.display = "block";
         });
-
-        figDiv.appendChild(grid);
-        container.appendChild(figDiv);
+        grid.appendChild(optImg);
       });
+
+      figDiv.appendChild(grid);
+      container.appendChild(figDiv);
+    }
+
+    // Переход к следующей фигуре
+    function nextFigure() {
+      currentFigureIndex++;
+      if (currentFigureIndex < figureTestData.length) {
+        renderFiguresTest();
+        document.getElementById("nextFigureButton").style.display = "none";
+      } else {
+        // Если фигуры закончились, завершаем тест
+        finishFiguresTest();
+      }
     }
 
     // Завершаем тест включённых фигур
@@ -230,8 +247,6 @@
     }
 
     // Раздел 6: 50/50 показывать картинку
-    // Вызывается, когда мы заходим в раздел 6
-    // (в нашем примере просто при загрузке страницы)
     window.addEventListener("DOMContentLoaded", () => {
       // 50% вероятность
       surveyData.showArtInstructionImage = Math.random() < 0.5;
@@ -244,7 +259,6 @@
     });
 
     // Раздел 7: Оценка произведений искусства
-    // Пример на 2 картины
     const artData = [
       { id: 1, src: "images/art1.jpg" },
       { id: 2, src: "images/art2.jpg" },
@@ -291,12 +305,6 @@
 
         container.appendChild(artDiv);
       });
-    }
-
-    // Когда заходим в раздел 7 (через кнопку "Начать оценку")
-    function goToSection7() {
-      goToSection(7);
-      renderArtRatings();
     }
 
     // Переопределяем кнопку в разделе 6
