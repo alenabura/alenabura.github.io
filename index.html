@@ -150,7 +150,9 @@
       figuresAnswers: [],
       figuresStartTime: 0,
       figuresEndTime: 0,
-      artRatings: []
+      artRatings: [],
+      primerShown: false, // добавляем признак показа прайминга
+      figuresDuration: 0  // длительность выполнения теста включённых фигур
     };
 
     // Функция переключения разделов
@@ -216,6 +218,9 @@
 
     // Раздел 6: При загрузке проверяем вероятность показа картинок для инструкции по искусству
     window.addEventListener('DOMContentLoaded', () => {
+      // Устанавливаем, что прайминг (пример) был показан
+      surveyData.primerShown = true;
+
       if (Math.random() < 0.5) {
         const artImagesDiv = document.getElementById('artInstructionImages');
         const carImg = document.createElement('img');
@@ -288,7 +293,7 @@
 
     // Функция для отправки данных на Google Таблицу
     function sendData() {
-      const url = "https://script.google.com/macros/s/AKfycbwIf-GMM4qQeIkLDe2zzTWzMLygz742J7YcTjRZZlafq4V4ISvtIGdQjwr_apA_YzvHGg/exec"; // Замените на Ваш URL веб-приложения Google Apps Script
+      const url = "https://script.google.com/macros/s/AKfycbXXX/exec"; // Замените на Ваш URL веб-приложения Google Apps Script
       fetch(url, {
         method: "POST",
         mode: "no-cors",
@@ -303,10 +308,14 @@
 
     // Функция завершения теста оценивания искусства
     function finishArtTest() {
+      // Вычисляем длительность выполнения теста включённых фигур в секундах
+      surveyData.figuresDuration = (surveyData.figuresEndTime - surveyData.figuresStartTime) / 1000;
+      // Преобразуем массивы с ответами в строку, чтобы избежать [object Object]
+      surveyData.figuresAnswers = JSON.stringify(surveyData.figuresAnswers);
+      surveyData.artRatings = JSON.stringify(surveyData.artRatings);
+      
       sendData(); // Отправляем данные на Google Таблицу
       goToSection(8);
-      // Если необходимо, можно добавить дополнительную обработку ответа.
-      // console.log(surveyData);
     }
   </script>
 
