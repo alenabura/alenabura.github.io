@@ -279,19 +279,19 @@
       container.appendChild(ratingDiv);
     }
 
-    function finishArtTest() {
-      goToSection(8);
-    }
+   
+function finishArtTest() {
+  // Отправляем данные на сервер
+  submitAllData();
 
+  // Переходим к разделу 8
+  goToSection(8);
+}
     // Функция для отображения модальной плашки
-    function showModal(message, duration = 3000) {
-      const modal = document.getElementById("modal");
-      modal.textContent = message;
-      modal.style.display = "block";
-      setTimeout(() => {
-        modal.style.display = "none";
-      }, duration);
-    }
+   <!-- Модальная плашка для уведомлений -->
+<div id="modal" style="display: none; position: fixed; bottom: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 15px; border-radius: 5px; z-index: 1000;">
+  Данные успешно отправлены!
+</div>
 
     // Финальная отправка всех данных
     async function submitAllData() {
