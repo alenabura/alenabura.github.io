@@ -217,7 +217,7 @@
     }
 
     // Раздел 6: При загрузке проверяем вероятность показа картинок для инструкции по искусству
-   window.addEventListener('DOMContentLoaded', () => {
+ window.addEventListener('DOMContentLoaded', () => {
   const artImagesDiv = document.getElementById('artInstructionImages');
 
   if (Math.random() < 0.5) { // 50% вероятность показа
@@ -230,11 +230,12 @@
     artImagesDiv.appendChild(carImg);
     artImagesDiv.appendChild(shopImg);
 
-    surveyData.primerShown = true; // Теперь корректно записываем
+    surveyData.primerShown = true; // Теперь правильно записываем
   } else {
     surveyData.primerShown = false;
   }
 });
+
 
     // Раздел 7: Тест оценивания искусства
     let currentArt = 1;
@@ -294,13 +295,17 @@
     }
 
     // Функция для отправки данных на Google Таблицу
-   function sendData() {
-  const url = "https://script.google.com/macros/s/AKfycbylPaQ0c8-ASR25t6065vZOoaSh2U07nCJVJRbodp31SbxMHqFxNrdvbf983Q0BJDbf_A/exec"; // Замените на реальный URL веб-приложения Google Apps Script
+ function sendData() {
+  const url = "https://script.google.com/macros/s/AKfycbzdoTK-SKnMYAZCIVRahI4IiKgYZaDHRrkmpO6CBWPnAb-b6nYTCtgAFaNPmFoefa1N9g/exec"; 
 
   const dataToSend = {
-    ...surveyData, // Копируем все данные
-    figuresAnswers: surveyData.figuresAnswers, // Оставляем массив
-    artRatings: surveyData.artRatings // Оставляем массив
+    age: surveyData.age,
+    gender: surveyData.gender,
+    education: surveyData.education,
+    showArtInstructionImage: surveyData.primerShown, // меняем название
+    figuresTimeSec: surveyData.figuresDuration, // меняем название
+    figuresAnswers: surveyData.figuresAnswers.join(","), // превращаем в строку
+    artRatings: surveyData.artRatings.join(",") // превращаем в строку
   };
 
   fetch(url, {
@@ -310,23 +315,24 @@
     },
     body: JSON.stringify(dataToSend)
   })
-  .then(response => response.json()) // Попробуем получить ответ от сервера
+  .then(response => response.text()) // Получаем текст, чтобы увидеть ошибки
   .then(data => console.log("Ответ от сервера:", data))
   .catch(error => console.error("Ошибка при отправке данных:", error));
 }
 
 
     // Функция завершения теста оценивания искусства
-    function finishArtTest() {
-      // Вычисляем длительность выполнения теста включённых фигур в секундах
-      surveyData.figuresDuration = (surveyData.figuresEndTime - surveyData.figuresStartTime) / 1000;
-      // Преобразуем массивы с ответами в строку, чтобы избежать [object Object]
-      surveyData.figuresAnswers = JSON.stringify(surveyData.figuresAnswers);
-      surveyData.artRatings = JSON.stringify(surveyData.artRatings);
-      
-      sendData(); // Отправляем данные на Google Таблицу
-      goToSection(8);
-    }
+   function finishArtTest() {
+  if (surveyData.figuresEndTime === 0) {
+    surveyData.figuresEndTime = Date.now();
+  }
+
+  surveyData.figuresDuration = (surveyData.figuresEndTime - surveyData.figuresStartTime) / 1000;
+
+  sendData();
+  goToSection(8);
+}
+
   </script>
 
 </body>
