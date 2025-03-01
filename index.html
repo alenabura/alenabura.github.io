@@ -150,9 +150,7 @@
       figuresAnswers: [],
       figuresStartTime: 0,
       figuresEndTime: 0,
-      artRatings: [],
-      primerShown: false, // добавляем признак показа прайминга
-      figuresDuration: 0  // длительность выполнения теста включённых фигур
+      artRatings: []
     };
 
     // Функция переключения разделов
@@ -217,25 +215,19 @@
     }
 
     // Раздел 6: При загрузке проверяем вероятность показа картинок для инструкции по искусству
- window.addEventListener('DOMContentLoaded', () => {
-  const artImagesDiv = document.getElementById('artInstructionImages');
-
-  if (Math.random() < 0.5) { // 50% вероятность показа
-    const carImg = document.createElement('img');
-    carImg.src = 'https://alenabura.github.io/images/car.png';
-    carImg.style.width = '150px';
-    const shopImg = document.createElement('img');
-    shopImg.src = 'https://alenabura.github.io/images/shop.png';
-    shopImg.style.width = '150px';
-    artImagesDiv.appendChild(carImg);
-    artImagesDiv.appendChild(shopImg);
-
-    surveyData.primerShown = true; // Теперь правильно записываем
-  } else {
-    surveyData.primerShown = false;
-  }
-});
-
+    window.addEventListener('DOMContentLoaded', () => {
+      if (Math.random() < 0.5) {
+        const artImagesDiv = document.getElementById('artInstructionImages');
+        const carImg = document.createElement('img');
+        carImg.src = 'https://alenabura.github.io/images/car.png';
+        carImg.style.width = '150px';
+        const shopImg = document.createElement('img');
+        shopImg.src = 'https://alenabura.github.io/images/shop.png';
+        shopImg.style.width = '150px';
+        artImagesDiv.appendChild(carImg);
+        artImagesDiv.appendChild(shopImg);
+      }
+    });
 
     // Раздел 7: Тест оценивания искусства
     let currentArt = 1;
@@ -295,44 +287,27 @@
     }
 
     // Функция для отправки данных на Google Таблицу
- function sendData() {
-  const url = "https://script.google.com/macros/s/AKfycbwmwCrTjUZqKZ6xj3li9NRbilkekime98pGS7y5_c7DNnnA-4N-CK6QLS1jRSuChzSAqw/exec"; 
-
-  const dataToSend = {
-    age: surveyData.age,
-    gender: surveyData.gender,
-    education: surveyData.education,
-    showArtInstructionImage: surveyData.primerShown, // меняем название
-    figuresTimeSec: surveyData.figuresDuration, // меняем название
-    figuresAnswers: surveyData.figuresAnswers.join(","), // превращаем в строку
-    artRatings: surveyData.artRatings.join(",") // превращаем в строку
-  };
-
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(dataToSend)
-  })
-  .then(response => response.text()) // Получаем текст, чтобы увидеть ошибки
-  .then(data => console.log("Ответ от сервера:", data))
-  .catch(error => console.error("Ошибка при отправке данных:", error));
-}
-
+    function sendData() {
+      const url = "https://script.google.com/macros/s/AKfycbXXX/exec"; // Замените на Ваш URL веб-приложения Google Apps Script
+      fetch(url, {
+        method: "POST",
+        mode: "no-cors",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(surveyData)
+      })
+      .then(() => console.log("Данные успешно отправлены"))
+      .catch(error => console.error("Ошибка при отправке данных:", error));
+    }
 
     // Функция завершения теста оценивания искусства
-   function finishArtTest() {
-  if (surveyData.figuresEndTime === 0) {
-    surveyData.figuresEndTime = Date.now();
-  }
-
-  surveyData.figuresDuration = (surveyData.figuresEndTime - surveyData.figuresStartTime) / 1000;
-
-  sendData();
-  goToSection(8);
-}
-
+    function finishArtTest() {
+      sendData(); // Отправляем данные на Google Таблицу
+      goToSection(8);
+      // Если необходимо, можно добавить дополнительную обработку ответа.
+      // console.log(surveyData);
+    }
   </script>
 
 </body>
