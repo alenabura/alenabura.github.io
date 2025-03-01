@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Опрос</title>
+  <title>Большой тест</title>
   <style>
     .section { display: none; }
     .section.active { display: block; }
@@ -12,36 +12,39 @@
       margin: 10px 0;
     }
     .image-grid img {
-      width: 100px;
+      width: 100px; /* Подстрой под нужный размер */
       cursor: pointer;
       border: 2px solid transparent;
-      transition: all 0.3s ease;
-      background: rgba(0,0,0,0.1);
-      border-radius: 4px;
-    }
-    .image-grid img:hover {
-      filter: brightness(0.9);
-      border-color: #888;
     }
     .image-grid img.selected {
-      border: 2px solid red !important;
+      border: 2px solid red; /* Подсветка выбранного */
     }
-    .rating-options label {
-      margin: 0 5px;
-      cursor: pointer;
-    }
-    .rating-options span {
-      margin: 0 10px;
-      font-weight: bold;
-    }
-    .progress-info {
+    .radio-group {
       margin: 10px 0;
-      font-weight: bold;
+    }
+    .radio-group label {
+      display: block;
+      margin: 5px 0;
+    }
+    /* Стили для модальной плашки */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px;
+      border-radius: 5px;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     }
   </style>
 </head>
 <body>
+  <h1>Опрос</h1>
 
+  <!-- Раздел 1: Приветствие -->
   <div class="section active" id="section1">
     <p>Здравствуйте! Приглашаем Вас принять участие в опросе. Опрос состоит из нескольких разделов. Среднее время заполнения — 10-15 минут. Ваше участие очень важно для нас! Благодарим за внимание и участие!</p>
     <button onclick="goToSection(2)">Начать</button>
@@ -55,243 +58,379 @@
       <input type="number" id="age" />
     </label>
     <br><br>
-    <div>
+    <div class="radio-group">
       Укажите Ваш биологический пол:
       <label><input type="radio" name="gender" value="м"> Мужской</label>
       <label><input type="radio" name="gender" value="ж"> Женский</label>
     </div>
     <br>
-    <div>
+    <div class="radio-group">
       Укажите Ваш уровень образования:
       <label><input type="radio" name="education" value="Среднее"> Среднее образование</label>
       <label><input type="radio" name="education" value="Среднее специальное"> Среднее специальное</label>
       <label><input type="radio" name="education" value="Студент"> Студент</label>
       <label><input type="radio" name="education" value="Высшее"> Высшее образование</label>
     </div>
-    <br>
+    <br><br>
     <button onclick="saveSection2()">Перейти к следующему разделу</button>
   </div>
 
   <!-- Раздел 3: Инструкция к тесту включённых фигур -->
-  <div class="section" id="section3">
-    <h1>ТЕСТ ВКЛЮЧЁННЫХ ФИГУР</h1>
-    <h2>Инструкция</h2>
-    <p>Вам будут предъявлены сложные фигуры (изображения), в каждой из которых имеется один из простых эталонов.</p>
-    <p>Вы должны найти в каждом случае, какой из этих элементов содержится в рисунке, и указать его.</p>
-    <p>В каждом сложном рисунке имеется один из следующих элементов:</p>
-    <div class="image-grid">
-      <img src="https://alenabura.github.io/images/1.1.png" alt="Эталон 1">
-      <img src="https://alenabura.github.io/images/1.2.png" alt="Эталон 2">
-      <img src="https://alenabura.github.io/images/1.3.png" alt="Эталон 3">
-      <img src="https://alenabura.github.io/images/1.4.png" alt="Эталон 4">
-      <img src="https://alenabura.github.io/images/1.5.png" alt="Эталон 5">
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Тест включённых фигур</title>
+  <style>
+    .section { display: none; }
+    .section.active { display: block; }
+    .eftF {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    .eftF img {
+      cursor: pointer;
+      border: 1px solid #999;
+      max-width: 120px;
+      padding: 10px;
+    }
+    .eftF img:hover {
+      background: #00CCFF33;
+    }
+    #xx3 {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="section active" id="section1">
+    <h1>Тест включённых фигур</h1>
+    <div id="testRule">
+      <div id="trInfo" class="testRunInfo">
+        <div class="tauad">
+          <p>Автор: К. У. Эттрих (1970)</p>
+          <p>Адаптация: И. П. Шкуратова (1983)</p>
+        </div>
+      </div>
+      <div class="lntitle">
+        <div class="lntitle_line"></div>
+        <div class="lntitle_text">Инструкция</div>
+        <div class="lntitle_line"></div>
+      </div>
+      <div id="Rules" class="testRules">
+        <p>Вам будут предъявлены сложные фигуры (изображения), в каждой из которых имеется один из простых эталонов.</p>
+        <p>Вы должны найти в каждом случае, какой из этих элементов содержится в рисунке, и указать его.</p>
+        <br>
+        <p>В каждом сложном рисунке имеется один из следующих элементов:</p>
+        <div class="eftF" style="margin: 10px 0;">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAACgAgMAAAAa1OqoAAAACVBMVEUAAAAAAAD///+D3c/SAAAAAXRSTlMAQObYZgAAANVJREFUeAHt2KEVwmAAxOBWMEL36QgIQDAC+zBCRTslojImv+vj5XzEZ29qrbUL7jm6M5uHu/XsPsfY9rq6urq6urq6urq6uv/u6urq8DO8D2znz8Bf48Vu46/BLey+k9iN3IfpZgD3+2QG4LaqbrE8ACUPQMkDUPIAtDwAJQ9AyQNQ8gC0PAAlD0DJA1DyALQ8ACUPQMkDUPIAtDwAPQ9A8DyQPAckzwHJU0DyHJA8ByTPAclTQPIckDwHJM8ByVNA8hyQPAckzwHJc0Dw5MC78Fpr7Qda4K1NaKYGuAAAAABJRU5ErkJggg==" alt="">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAACgAgMAAAAa1OqoAAAACVBMVEUAAAAAAAD///+D3c/SAAAAAXRSTlMAQObYZgAAAUZJREFUeAHs2LEZQDAUhVEKI9jHCClEYQT7GEEhU5rgnU53//5+nKTLlFJKKf3X2qs27npZ02w+R9Wu3XKVu5u8UfYIeNS7t5lnoHkGmmegeQaaZ6B5BpoHoHgAkgcgeQCSB6B4AJIHIHkAkgegeACSByB5AJIHoHgAkgcgeQCSByB4AIIHIHgAggcgeACCByB4AIJnIHgEgkcgeASCZyB4BIJHIHgEgmcgeASCRyB4BIpnoHkGggcgvocdfPpPnCfPBffnewCQPADJA5A8AMUDkDwAyQOQPADFA5A8AMkDkDwAxQOQPADJA5A8AMUDkDwAyQOQPADFA5A8AMkDkDwBzTPQPAPNM9A8A8EjEDwCwSMQPAPBIxA8AsETEDwAwQMQPADBAxA8AMEDEDwAwQMQPADBAxA8APlOC2C5y5t5SimlbzQEAMRp1BQZeQWSAAAAAElFTkSuQmCC" alt="">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAACgAgMAAAAa1OqoAAAACVBMVEUAAAAAAAD///+D3c/SAAAAAXRSTlMAQObYZgAAAK9JREFUeAHty7EJggEMhFGvyAjZxyX+gNnAbGamtBdR+WwU7vXvZGb2t3RmL+BL+A72dGEvruzljb1iT81eDHu57BV7avZi2Mtlr9hTsxfDXi57xZ6avRj2ctkr9tTwzffPz8/Pz8/Pz8/Pz8/Pz+949NkTfDH7xPuXy16xp2Yvhr1c9oo9NXsx7OWyV+yp2YthL5e9Yk/NXgx7uewVe2r2YtjLZa/Y0/EKf2ZmP+wObrXsAS1UQ48AAAAASUVORK5CYII=" alt="">
+          <img id="imd" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAACgBAMAAACVlB8IAAAAD1BMVEUAAAABAQECAgIAAAD///8BFQfcAAAAAXRSTlMAQObYZgAAAlRJREFUeAHt19FtxDgMhGF604CGVgHm2gXExjYg7/Rf0wEH3HO4mIQvp7+BD4RMSLbZbDab/XFI5mtsJhdItgPN1PxkNj9lbgGzDYxv03pcPa/10URtPz7QeG8mFReT3TjId9M0MBs6ySFNB2e2cydJ6ey+ojNZBClOt3ha85MUp1uQ1gYocwCT3X7InDuTvaNT5RBMNq5Olct/JvfZqXIPP5gsQJnLrwBAmVvxgSZzkdYclLllZbLhXeYWvNILd1DlHjg+uE9lDumFQ6fMnfsHCydzeyjap9zj+uCGk7llP/KzyVz+TTnQdS492/AXZQ5XVnt2yhyQfiu8KHP5g4ugzC3rkb9zZO5rTc8G6tzpupbn8p/JSp3zrDbipXNL9PyTUuYWz2rolLn8rwcO6tzlzHU5dT5CX+88tyCr7ZS5/MHdoM7lVyAO6hyy2vqizj3PpIYXdc5PIByOn7o6qXOI54pA4IcC/A0umGz/FQ5M5rUc/l/c5CY3uclNbnKTm9zkJje5yU3uvZVy93cph9LpYrdCDmGF3Agr5Ia3Qu6Ozeq4gWaFHGCFHFYr5BxWyN2xFXI3mtVxbzQr5M5mhRzcCjmcVsiNsEJ+xFbIjWhWxw1vVsghrJADrJDDaoVc8O9Cbjyb1XFvNCvkfLNC7nIr5AAr5LBbIXf7Vsjd0ayOG2hWyAFWyAFWyMGtkBuwQm6gFXK3ouW5539sswru5L8FrITzzx8L8tkFrIgLkvfVrG66sW5Wxw1vVsY54VbHIWB6cHckCofpGfZIce42m81ms7/uH+L4LdRirtMfAAAAAElFTkSuQmCC" alt="">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAANwAAACgAgMAAAAa1OqoAAAACVBMVEUAAAAAAAD///+D3c/SAAAAAXRSTlMAQObYZgAAAQVJREFUeAHt2QFmxVAQheFTvCW067lLGNzAW0LXM28Jg9tVFq8oIZ38jaE1PwAfhhMh0d+vu21nst+7jzO1a9euXbt27dq1a9eu3U/F9qzKub6XdxM6Y24N5oI6MefFzphb1A3mQsw9oHPojLlF3WAuxNwDOofOat0azAV1Ys4Pv2fd93dtz2bW7d4JR70d31XgXJlul7kJnSnTyzt3iCvf5+77xyDVzqnWuQSGxt2EziQwNOzW4I4MLagTd2TYrmzXuAmdSWBo2K3BHRlaUCfs0NC82E0JDduU7wK3BndkaEGdsEND82I3JTQ0q3VrSGAw2AV1wg4NzWvc6/bVhP/UTd3/7RP7YXA8PD0v+gAAAABJRU5ErkJggg==" alt="">
+        </div>
+        <p>Укажите в каждом случае, какой из этих элементов содержится в рисунке. Например:</p>
+        <div id="xx2" style="margin: 10px 0;">
+          <img onclick="ui('xx3'); ui('xx2', 'none'); document.getElementById('imd').style.backgroundColor='#00CCFF33';" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPkAAADaAQAAAABMDNmlAAACPklEQVR4AWL4DwfzAe3XAaYdMRiG4QIXkA2U6C6KS5Y2RRnArKmCKWi3cONsIAMEMX+Bmw8vHwA1A4iH85L/TDIBz48F7mzAcOByP1EdSAbc2YCxGXCFAdWBZMBdDBibAS0MqA4kA+5iwNgMaGHA6UAyYBYDRhjQHNgdSAbMYsAIA5oDuwPZgFkM6GFAc2B3IBswiwE9DHg5sBtwZwPmZkAPA6oDuwF3NmBuBvQwoDpwOJAdKA94wAMe8GU9CKYDY61+IGhr9SeCc61+RZDis+adwP0po08CY4vPGgTXWtwRVLmiIzhWYyEgN/seBOZqfCHo0ojgJY0I9tW4EdDGAKCNFYE2ItBGANo4NgTaSGAWaQSgA3sgaNpI4JRGADqwVxC4tRGADmxCcC3GgqBKIwBtbEFAGxFoIwJtRKCNCA5pBKADeyKY0oigy98WwWs1BoJdGhGsxh2BDGxCoI0ImjQikEYG0ojgfTVmBN+lEcE3+dsieJPXH4L1vDmQEMip9/cBD3jAfw+6vBQQfBig9xEGctZjg95HCOidKSFoco4S0MaNgByTLQjIMXki0EYEVd7/CNJqDALaSECvGzuCthozAm0EoI09CMhWvhCMkEYCerVEoFd0AneWRgI6bghkKw8EVRoRHDJuALSxBwG5lRWBbGVCoI0IkjQSmEXGjYA2ItBGBLKVBUGWRgLaGAT0awtBlUYE2khAxy0I6Jc1Am1EoFuJIEkjgT9FGgn8lq1E8EsaEZzSKACfzYFY4B8CpDT1G4IxTgAAAABJRU5ErkJggg==" alt="">
+        </div>
+        <div id="xx3" style="margin: 10px 0;">
+          <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAPkAAADaBAMAAACWWfk7AAAAGFBMVEX///8AAAAICQobICIiKSvM9f8oLzIRFRazB1dhAAACxklEQVR4AcTNMQEAMBCEMN7B4d9sLXQjBsKvG51zZV7u7rpd6Xal2891+zm63dHtSrcr3X7S7ee6/RzdrnS70u0n3X6u28/R7Y5uV7pd6faTbj/X7efodqXblW4/6fZz3X6Obnd0u9LtSref6/ZzdLuj25VuV7r9pNvPdfs5ut3R7Uq3K91+rtvP0e2Oble6Xen2k3B36f7at4Mbt3UoDKOjDkS+CgS7gRnrwXsZjAuI2EHgBsb9IzuuSRwGAYJ7GziL/xM3M/4IPfTQQw899NDnXeihhx566KGHHnoauOl6vvXe13x9udbe+3nZJuvLpfTi56t8TtZzN16fpU7W896N//hVQcfRH+8Kuo7+XWbreaS4CrqNft5LBR1Hf+51XPfRW+6g6+jvCrqO/iqgw+gNB91Gf5bqOhQHOhTXHljTobjvIroXBzqM3h5Y0Gn0515Bh9Fb7qDb6O8qOo7+KtP1LLjqeR97YEGX0Vtxrg+P3nDQYfR3na7nHYoDfRC/N9z1Vtz4A+u6F+e6Fye6Fwf6cgUc9DY6PLCoZy4O9LwrDvpyhdxBb6NjcaDnog8s6HnXBxb0dJXiQG+jU3Gge3GiZ8ZBz7s+sKAvXBzoy6UoDnr633MH/XLrunsBnf/gcql/QP+vdt4t9NBDDz300EMPPfTQQw899NDDNf2xpc5b5+tnw/+Cfn6tAz+Anq0faeC3sLP1x9aNJ69O8Nn6ufWP/iG6F+c64LP1Yx3JnXQvjnXAQQe85U46fGur6J476IC33OfqRxooDnTPHXTPfbZ+DuAr65476J476ICnD9f5WwPdcwcd8NV1/9Zc99xR99xNd1z0I+HooHvuojsO+rnp6KB7caA7Lvqx6uige3GgKw56w2F00PlbA91zB73hMDroR1IcdM8ddM8d9JNx0D130L88d9A/Aff/7ttS960Dfcy/bvw38+Cocc+JLe8AAAAASUVORK5CYII=" alt="">
+        </div>
+        <p><i>(кликните по рисунку, чтобы увидеть правильный ответ)</i></p>
+        <br>
+        <p>Помните:</p>
+        <p>&bull; В каждом рисунке имеется один из элементов приблизительно той же величины<sup>(*)</sup> и так же расположенный, как на образце.</p>
+        <p>&bull; В каждом рисунке имеется только один из элементов.</p>
+        <p>&bull; <b>Время выполнения теста учитывается при расчете результата.</b></p>
+        <br>
+        <p>(*) При прохождении теста на мобильных устройствах размеры образцов будут меньше, чем на фигуре.</p>
+      </div>
     </div>
-    <p>Укажите в каждом случае, какой из этих элементов содержится в рисунке. Например:</p>
-    <div>
-      <img src="https://alenabura.github.io/images/primer.png" alt="Пример" style="width:150px;">
-    </div>
-    <br>
-    <p>Помните:</p>
-    <ul>
-      <li>В каждом рисунке имеется один из элементов приблизительно той же величины(*) и так же расположенный, как на образце.</li>
-      <li>В каждом рисунке имеется только один из элементов.</li>
-      <li>Время выполнения теста учитывается при расчёте результата.</li>
-    </ul>
-    <p>(*) При прохождении теста на мобильных устройствах размеры образцов будут меньше, чем на фигуре.</p>
-    <button onclick="startFiguresTest()">Начать тест включённых фигур</button>
+    <button onclick="startTest()">Начать тестирование</button>
   </div>
+
+  <script>
+    function ui(id, display = 'block') {
+      document.getElementById(id).style.display = display;
+    }
+
+    function startTest() {
+      alert("Тестирование начато!");
+      // Здесь можно добавить логику для начала теста
+    }
+  </script>
+</body>
+</html>
 
   <!-- Раздел 4: Сам тест включённых фигур -->
   <div class="section" id="section4">
     <h2>Тест включённых фигур — вопросы</h2>
-    <div class="progress-info" id="figureProgress"></div>
+    <p>Ниже упрощённый пример на 2 изображения (в реальности у вас будет 30).</p>
+
+    <!-- Место для динамического вывода фигур -->
     <div id="figureTestContainer"></div>
+
+    <button id="nextFigureButton" style="display: none;" onclick="nextFigure()">Следующая фигура</button>
   </div>
 
-  <!-- Раздел 5: Завершение теста включённых фигур -->
+  <!-- Раздел 5: Завершение теста фигур -->
   <div class="section" id="section5">
-    <h2>Вы закончили тест включённых фигур</h2>
+    <h2>Тест включённых фигур пройден!</h2>
+    <p>Переходите к следующему разделу.</p>
     <button onclick="goToSection(6)">Перейти к следующему разделу</button>
   </div>
 
-  <!-- Раздел 6: Инструкция к тесту оценивания искусства -->
+  <!-- Раздел 6: Инструкция к оценке произведений искусства -->
   <div class="section" id="section6">
     <h2>Оценка произведений искусства</h2>
     <p>
-      Следующий раздел будет посвящён оценке произведений искусства. Ваше участие займёт около 15 минут.
-      Вам будет предложено оценить финансовую стоимость нескольких произведений искусства по шкале от 1 (совсем не дорого) до 10 (очень дорого).
-      После этого вы ответите на несколько демографических вопросов. Ваши ответы будут анонимны и будут использованы только для научных целей. Спасибо!
+      Следующий раздел будет посвящён оценке произведений искусства. Ваше участие займёт около 15 минут.  
+      Вам будет предложено оценить финансовую стоимость нескольких произведений искусства по шкале от 1 (совсем не дорого) до 10 (очень дорого).  
+      После этого вы ответите на несколько демографических вопросов.  
+      Ваши ответы будут анонимны и будут использованы только для научных целей. Спасибо!
     </p>
-    <div id="artInstructionImages"></div>
-    <button onclick="startArtRatingTest()">Начать оценивание картин</button>
+    <!-- 50/50 картинка рядом с инструкцией -->
+    <div id="artInstructionImage" style="margin: 10px 0;"></div>
+
+    <button onclick="startArtRatingTest()">Начать оценку</button>
   </div>
 
-  <!-- Раздел 7: Тест оценивания искусства -->
+  <!-- Раздел 7: Оценка произведений искусства -->
   <div class="section" id="section7">
     <h2>Оценка произведений искусства</h2>
-    <div class="progress-info" id="artProgress"></div>
+    <p>Здесь пример на 2 картины (в реальности у вас 6).</p>
+
+    <!-- Место для динамического вывода картин -->
     <div id="artRatingContainer"></div>
-    <button id="finishArtButton" style="display: none;" onclick="finishArtTest()">Завершить тест</button>
+
+    <button id="nextArtButton" style="display: none;" onclick="nextArt()">Следующая картина</button>
   </div>
 
+  <!-- Модальная плашка для уведомлений -->
+  <div id="modal" class="modal"></div>
+
+  <!-- Скрипт для логики переключения и сбора данных -->
   <script>
-    // Глобальный объект для хранения данных опроса
+    // Глобальный объект, где будем хранить все ответы
     const surveyData = {
-      age: null,
-      gender: null,
-      education: null,
-      figuresAnswers: [],
-      figuresStartTime: 0,
-      figuresEndTime: 0,
-      artRatings: []
+      startFiguresTime: 0,  // Время начала теста включённых фигур (мс)
+      endFiguresTime: 0,    // Время окончания
+      figuresAnswers: [],   // Массив ответов (какой эталон выбрал)
+      artRatings: [],       // Оценки произведений искусства
+      showArtInstructionImage: false, // Показывалась ли картинка в разделе 6
     };
 
-    // Функция переключения разделов
+    // Показываем/скрываем разделы
     function goToSection(num) {
-      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-      document.getElementById('section' + num).classList.add('active');
+      document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById("section" + num).classList.add("active");
     }
 
-    // Сохраняем данные раздела 2 и переходим к разделу 3
+    // Сохраняем данные раздела 2
     function saveSection2() {
-      surveyData.age = document.getElementById('age').value.trim();
+      surveyData.age = document.getElementById("age").value.trim();
       surveyData.gender = document.querySelector('input[name="gender"]:checked')?.value;
       surveyData.education = document.querySelector('input[name="education"]:checked')?.value;
+
       goToSection(3);
     }
 
-    // Раздел 4: Тест включённых фигур
-    let currentFigure = 1;
-    const totalFigures = 30;
-
+    // Когда нажимаем "Начать тест включённых фигур"
     function startFiguresTest() {
-      surveyData.figuresStartTime = Date.now();
-      currentFigure = 1;
-      renderFigureTest();
+      // Засекаем время
+      surveyData.startFiguresTime = Date.now();
+      // Переходим к разделу 4
       goToSection(4);
+      currentFigureIndex = 0; // Начинаем с первой картинки
+      renderFiguresTest();
     }
 
-    function renderFigureTest() {
-      const container = document.getElementById('figureTestContainer');
-      container.innerHTML = '';
-      
-      // Добавляем информацию о прогрессе
-      document.getElementById('figureProgress').textContent = `Картинка ${currentFigure} из ${totalFigures}`;
+    // Пример данных для теста включённых фигур (упрощённо, 2 картинки)
+    const figureTestData = [
+      {
+        id: 1,
+        bigImage: "images/figure1.png",
+        options: [
+          "images/optionA.png",
+          "images/optionB.png",
+          "images/optionC.png",
+          "images/optionD.png",
+          "images/optionE.png",
+        ]
+      },
+      {
+        id: 2,
+        bigImage: "images/figure2.png",
+        options: [
+          "images/optionA.png",
+          "images/optionB.png",
+          "images/optionC.png",
+          "images/optionD.png",
+          "images/optionE.png",
+        ]
+      }
+    ];
 
-      // Основное изображение теста
-      const mainImg = document.createElement('img');
-      mainImg.src = `https://alenabura.github.io/images/${currentFigure}.png`;
-      mainImg.style.width = '300px';
-      container.appendChild(mainImg);
+    let currentFigureIndex = 0; // Текущая картинка
 
-      // Сетка вариантов ответа
-      const optionsDiv = document.createElement('div');
-      optionsDiv.className = 'image-grid';
-      const options = ['1.1.png', '1.2.png', '1.3.png', '1.4.png', '1.5.png'];
-      options.forEach((option, index) => {
-        const optImg = document.createElement('img');
-        optImg.src = `https://alenabura.github.io/images/${option}`;
-        optImg.alt = `Опция ${index + 1}`;
-        optImg.addEventListener('click', () => {
-          surveyData.figuresAnswers.push({ figure: currentFigure, option: index + 1 });
-          currentFigure++;
-          if (currentFigure <= totalFigures) {
-            renderFigureTest();
-          } else {
-            surveyData.figuresEndTime = Date.now();
-            goToSection(5);
-          }
+    // Рисуем вопросы для теста включённых фигур
+    function renderFiguresTest() {
+      const container = document.getElementById("figureTestContainer");
+      container.innerHTML = "";
+
+      const fig = figureTestData[currentFigureIndex];
+      const figDiv = document.createElement("div");
+      figDiv.style.border = "1px solid #ccc";
+      figDiv.style.marginBottom = "20px";
+      figDiv.style.padding = "10px";
+
+      // Заголовок
+      const title = document.createElement("h3");
+      title.textContent = `Фигура №${currentFigureIndex + 1}`;
+      figDiv.appendChild(title);
+
+      // Большая картинка
+      const bigImg = document.createElement("img");
+      bigImg.src = fig.bigImage;
+      bigImg.style.width = "200px";
+      figDiv.appendChild(bigImg);
+
+      // Сетка с 5 вариантами
+      const grid = document.createElement("div");
+      grid.className = "image-grid";
+
+      fig.options.forEach((optionSrc, optIndex) => {
+        const optImg = document.createElement("img");
+        optImg.src = optionSrc;
+        optImg.addEventListener("click", () => {
+          // Сохраняем выбор
+          surveyData.figuresAnswers[currentFigureIndex] = optIndex + 1; // Исправлено: сохраняем номер варианта (1-5)
+          // Подсвечиваем выбранную
+          grid.querySelectorAll("img").forEach(img => img.classList.remove("selected"));
+          optImg.classList.add("selected");
+          // Показываем кнопку "Следующая фигура"
+          document.getElementById("nextFigureButton").style.display = "block";
         });
-        optionsDiv.appendChild(optImg);
+        grid.appendChild(optImg);
       });
-      container.appendChild(optionsDiv);
+
+      figDiv.appendChild(grid);
+      container.appendChild(figDiv);
     }
 
-    // Раздел 6: При загрузке проверяем вероятность показа картинок
-    window.addEventListener('DOMContentLoaded', () => {
-      if (Math.random() < 0.5) {
-        const artImagesDiv = document.getElementById('artInstructionImages');
-        const carImg = document.createElement('img');
-        carImg.src = 'https://alenabura.github.io/images/car.png';
-        carImg.style.width = '150px';
-        const shopImg = document.createElement('img');
-        shopImg.src = 'https://alenabura.github.io/images/shop.png';
-        shopImg.style.width = '150px';
-        artImagesDiv.appendChild(carImg);
-        artImagesDiv.appendChild(shopImg);
+    // Переход к следующей фигуре
+    function nextFigure() {
+      currentFigureIndex++;
+      if (currentFigureIndex < figureTestData.length) {
+        renderFiguresTest();
+        document.getElementById("nextFigureButton").style.display = "none";
+      } else {
+        // Если фигуры закончились, завершаем тест
+        finishFiguresTest();
+      }
+    }
+
+    // Завершаем тест включённых фигур
+    function finishFiguresTest() {
+      surveyData.endFiguresTime = Date.now();
+      goToSection(5);
+    }
+
+    // Раздел 6: 50/50 показывать картинку
+    window.addEventListener("DOMContentLoaded", () => {
+      // 50% вероятность
+      surveyData.showArtInstructionImage = Math.random() < 0.5;
+      if (surveyData.showArtInstructionImage) {
+        const img = document.createElement("img");
+        img.src = "images/art_instructions.png";
+        img.style.width = "200px";
+        document.getElementById("artInstructionImage").appendChild(img);
       }
     });
 
-    // Раздел 7: Тест оценивания искусства
-    let currentArt = 1;
-    const totalArt = 6;
+    // Пример данных для оценки произведений искусства
+    const artData = [
+      { id: 1, src: "images/art1.jpg" },
+      { id: 2, src: "images/art2.jpg" },
+    ];
 
+    let currentArtIndex = 0; // Текущая картина
+
+    // Начало теста оценки произведений искусства
     function startArtRatingTest() {
-      currentArt = 1;
-      renderArtRating();
       goToSection(7);
+      currentArtIndex = 0; // Начинаем с первой картины
+      renderArtRating();
     }
 
+    // Рендерим текущую картину
     function renderArtRating() {
-      const container = document.getElementById('artRatingContainer');
-      container.innerHTML = '';
-      
-      // Добавляем информацию о прогрессе
-      document.getElementById('artProgress').textContent = `Картина ${currentArt} из ${totalArt}`;
+      const container = document.getElementById("artRatingContainer");
+      container.innerHTML = "";
 
-      // Изображение произведения искусства
-      const artImg = document.createElement('img');
-      artImg.src = `https://alenabura.github.io/images/${currentArt}p.png`;
-      artImg.style.width = '300px';
-      container.appendChild(artImg);
-      
-      // Оценочная шкала от 1 до 10
-      const ratingDiv = document.createElement('div');
-      ratingDiv.className = 'rating-options';
-      const leftLabel = document.createElement('span');
-      leftLabel.textContent = 'Очень дёшево';
-      ratingDiv.appendChild(leftLabel);
-      
+      const art = artData[currentArtIndex];
+      const artDiv = document.createElement("div");
+      artDiv.style.marginBottom = "20px";
+
+      const title = document.createElement("h3");
+      title.textContent = `Картина №${currentArtIndex + 1}`;
+      artDiv.appendChild(title);
+
+      const artImg = document.createElement("img");
+      artImg.src = art.src;
+      artImg.style.width = "200px";
+      artDiv.appendChild(artImg);
+
+      // Радио-кнопки 1-10
+      const ratingDiv = document.createElement("div");
       for (let i = 1; i <= 10; i++) {
-        const label = document.createElement('label');
-        const radio = document.createElement('input');
-        radio.type = 'radio';
-        radio.name = 'artRating';
-        radio.value = i;
-        radio.addEventListener('change', () => {
-          surveyData.artRatings.push({ art: currentArt, rating: i });
-          currentArt++;
-          if (currentArt <= totalArt) {
-            renderArtRating();
-          } else {
-            document.getElementById('finishArtButton').style.display = 'block';
-          }
+        const label = document.createElement("label");
+        label.style.marginRight = "5px";
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "artRating" + currentArtIndex;
+        radio.value = i.toString();
+
+        radio.addEventListener("change", () => {
+          surveyData.artRatings[currentArtIndex] = i; // Сохраняем выбранную оценку
+          // Показываем кнопку "Следующая картина"
+          document.getElementById("nextArtButton").style.display = "block";
         });
+
         label.appendChild(radio);
-        label.appendChild(document.createTextNode(i));
+        label.appendChild(document.createTextNode(i + " "));
         ratingDiv.appendChild(label);
       }
-      
-      const rightLabel = document.createElement('span');
-      rightLabel.textContent = 'Очень дорого';
-      ratingDiv.appendChild(rightLabel);
-      
-      container.appendChild(ratingDiv);
+      artDiv.appendChild(ratingDiv);
+
+      container.appendChild(artDiv);
     }
 
-   
-function finishArtTest() {
-  // Отправляем данные на сервер
-  submitAllData();
+    // Переход к следующей картине
+    function nextArt() {
+      currentArtIndex++;
+      if (currentArtIndex < artData.length) {
+        renderArtRating();
+        document.getElementById("nextArtButton").style.display = "none";
+      } else {
+        // Если картины закончились, завершаем тест и отправляем данные
+        submitAllData();
+      }
+    }
 
-  // Переходим к разделу 8
-  goToSection(8);
-}
     // Функция для отображения модальной плашки
-   <!-- Модальная плашка для уведомлений -->
-<div id="modal" style="display: none; position: fixed; bottom: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 15px; border-radius: 5px; z-index: 1000;">
-  Данные успешно отправлены!
-</div>
+    function showModal(message, duration = 3000) {
+      const modal = document.getElementById("modal");
+      modal.textContent = message;
+      modal.style.display = "block";
+      setTimeout(() => {
+        modal.style.display = "none";
+      }, duration);
+    }
 
     // Финальная отправка всех данных
     async function submitAllData() {
