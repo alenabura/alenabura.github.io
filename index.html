@@ -39,6 +39,8 @@
       font-weight: bold;
     }
   </style>
+  <!-- Подключаем jQuery для JSONP -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -214,21 +216,6 @@
       container.appendChild(optionsDiv);
     }
 
-    // Раздел 6: При загрузке проверяем вероятность показа картинок для инструкции по искусству
-    window.addEventListener('DOMContentLoaded', () => {
-      if (Math.random() < 0.5) {
-        const artImagesDiv = document.getElementById('artInstructionImages');
-        const carImg = document.createElement('img');
-        carImg.src = 'https://alenabura.github.io/images/car.png';
-        carImg.style.width = '150px';
-        const shopImg = document.createElement('img');
-        shopImg.src = 'https://alenabura.github.io/images/shop.png';
-        shopImg.style.width = '150px';
-        artImagesDiv.appendChild(carImg);
-        artImagesDiv.appendChild(shopImg);
-      }
-    });
-
     // Раздел 7: Тест оценивания искусства
     let currentArt = 1;
     const totalArt = 6;
@@ -286,40 +273,41 @@
       container.appendChild(ratingDiv);
     }
 
-    // Функция для отправки данных на Google Таблицу
+    // Функция для отправки данных через JSONP
     function sendData() {
-  const url = "https://script.google.com/macros/s/AKfycbxidu0vgi2eK0yMme0g6Gsak1HBykCnp4k7zSsdlw--eUMHn_rtKFhPhm3j3G1Pe7BkDA/exec"; // Замените на ваш URL
-  console.log("Отправляемые данные:", surveyData); // Логируем данные перед отправкой
+      const url = "https://script.google.com/macros/s/AKfycbwiOLhboeWMOR0s7E7l6m6DhC1_d_1p5fCkIKrZ0TDsTQVmv4KLmAW9bCAKOqBcPha5LA/exec";
+      console.log("Отправляемые данные:", surveyData);
 
-  fetch(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(surveyData)
-  })
-  .then(response => {
-    console.log("Ответ от сервера:", response); // Логируем ответ от сервера
-    return response.json();
-  })
-  .then(data => {
-    console.log("Ответ от сервера (JSON):", data); // Логируем JSON-ответ
-    if (data.success) {
-      console.log("Данные успешно отправлены");
-    } else {
-      console.error("Ошибка при отправке данных:", data.error);
+      // Используем jQuery для отправки JSONP-запроса
+      $.ajax({
+        url: url,
+        method: "GET",
+        dataType: "jsonp",
+        data: surveyData, // Передаём данные как параметры запроса
+        success: function(response) {
+          console.log("Ответ от сервера:", response);
+          if (response.success) {
+            console.log("Данные успешно отправлены");
+            goToSection(8); // Переходим к завершающему разделу
+          } else {
+            console.error("Ошибка при отправке данных:", response.error);
+          }
+        },
+        error: function(error) {
+          console.error("Ошибка при отправке данных:", error);
+        }
+      });
     }
-  })
-  .catch(error => console.error("Ошибка при отправке данных:", error));
-}
+
+    // Функция для обработки ответа от сервера
+    function handleResponse(response) {
+      console.log("Ответ от сервера (JSONP):", response);
+    }
+
     // Функция завершения теста оценивания искусства
     function finishArtTest() {
-      sendData(); // Отправляем данные на Google Таблицу
-      goToSection(8);
-      // Если необходимо, можно добавить дополнительную обработку ответа.
-      // console.log(surveyData);
+      sendData(); // Отправляем данные
     }
   </script>
-
 </body>
 </html>
