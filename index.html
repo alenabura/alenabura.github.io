@@ -288,19 +288,30 @@
 
     // Функция для отправки данных на Google Таблицу
     function sendData() {
-      const url = "https://script.google.com/macros/s/AKfycbxidu0vgi2eK0yMme0g6Gsak1HBykCnp4k7zSsdlw--eUMHn_rtKFhPhm3j3G1Pe7BkDA/exec"; // Замените на Ваш URL веб-приложения Google Apps Script
-      fetch(url, {
-        method: "POST",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(surveyData)
-      })
-      .then(() => console.log("Данные успешно отправлены"))
-      .catch(error => console.error("Ошибка при отправке данных:", error));
-    }
+  const url = "https://script.google.com/macros/s/AKfycbxidu0vgi2eK0yMme0g6Gsak1HBykCnp4k7zSsdlw--eUMHn_rtKFhPhm3j3G1Pe7BkDA/exec"; // Замените на ваш URL
+  console.log("Отправляемые данные:", surveyData); // Логируем данные перед отправкой
 
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(surveyData)
+  })
+  .then(response => {
+    console.log("Ответ от сервера:", response); // Логируем ответ от сервера
+    return response.json();
+  })
+  .then(data => {
+    console.log("Ответ от сервера (JSON):", data); // Логируем JSON-ответ
+    if (data.success) {
+      console.log("Данные успешно отправлены");
+    } else {
+      console.error("Ошибка при отправке данных:", data.error);
+    }
+  })
+  .catch(error => console.error("Ошибка при отправке данных:", error));
+}
     // Функция завершения теста оценивания искусства
     function finishArtTest() {
       sendData(); // Отправляем данные на Google Таблицу
