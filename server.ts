@@ -6,7 +6,6 @@ const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxidu0vgi2eK0
 serve(async (req) => {
   const url = new URL(req.url);
 
-  // При заходе на "/" отдаем HTML-страницу
   if (req.method === "GET" && url.pathname === "/") {
     const html = await Deno.readTextFile("./index.html");
     return new Response(html, {
@@ -14,13 +13,11 @@ serve(async (req) => {
     });
   }
 
-  // При POST-запросе на "/submit" отправляем данные в Google Apps Script
   if (req.method === "POST" && url.pathname === "/submit") {
     try {
       const data = await req.json();
-      console.log("Получены данные от клиента:", data);
+      console.log("Получены данные от клиента:", data); // Логируем данные
 
-      // Отправляем данные в Google Apps Script
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -28,11 +25,22 @@ serve(async (req) => {
       });
 
       const result = await response.text();
-      console.log("Ответ от Google Apps Script:", result);
+      console.log("Ответ от Google Apps Script:", result); // Логируем ответ
 
       return new Response(result, {
         headers: { "Content-Type": "application/json" },
       });
+    } catch (error) {
+      console.error("Ошибка на сервере Deno:", error);
+      return new Response(
+        JSON.stringify({ error: "Internal Server Error" }),
+        { status: 500, headers: { "Content-Type": "application/json" } },
+      );
+    }
+  }
+
+  return new Response("Not Found", { status: 404 });
+});
     } catch (error) {
       console.error("Ошибка на сервере Deno:", error);
       return new Response(
