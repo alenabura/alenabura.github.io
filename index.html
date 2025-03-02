@@ -178,24 +178,24 @@
     const figureTestData = [
       {
         id: 1,
-        bigImage: "images/figure1.png",
+        bigImage: "images/1.png",
         options: [
-          "images/optionA.png",
-          "images/optionB.png",
-          "images/optionC.png",
-          "images/optionD.png",
-          "images/optionE.png",
+          "images/1.1.png",
+          "images/1.2.png",
+          "images/1.3.png",
+          "images/1.4.png",
+          "images/1.5.png",
         ]
       },
       {
         id: 2,
-        bigImage: "images/figure2.png",
+        bigImage: "images/2.png",
         options: [
-          "images/optionA.png",
-          "images/optionB.png",
-          "images/optionC.png",
-          "images/optionD.png",
-          "images/optionE.png",
+          "images/1.1.png",
+          "images/1.2.png",
+          "images/1.3.png",
+          "images/1.4.png",
+          "images/1.5.png",
         ]
       }
     ];
@@ -271,7 +271,7 @@
       surveyData.showArtInstructionImage = Math.random() < 0.5;
       if (surveyData.showArtInstructionImage) {
         const img = document.createElement("img");
-        img.src = "images/art_instructions.png";
+        img.src = "images/car.png";
         img.style.width = "200px";
         document.getElementById("artInstructionImage").appendChild(img);
       }
@@ -279,8 +279,8 @@
 
     // Пример данных для оценки произведений искусства
     const artData = [
-      { id: 1, src: "images/art1.jpg" },
-      { id: 2, src: "images/art2.jpg" },
+      { id: 1, src: "images/1p.jpg" },
+      { id: 2, src: "images/2p.jpg" },
     ];
 
     let currentArtIndex = 0; // Текущая картина
