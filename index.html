@@ -1,4 +1,4 @@
-вот мой обновленный код: <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -12,12 +12,19 @@
       margin: 10px 0;
     }
     .image-grid img {
-      width: 100px; /* Подстрой под нужный размер */
+      width: 100px;
       cursor: pointer;
       border: 2px solid transparent;
+      transition: all 0.3s ease;
+      background: rgba(0,0,0,0.1);
+      border-radius: 4px;
+    }
+    .image-grid img:hover {
+      filter: brightness(0.9);
+      border-color: #888;
     }
     .image-grid img.selected {
-      border: 2px solid red; /* Подсветка выбранного */
+      border: 2px solid red;
     }
     .radio-group {
       margin: 10px 0;
@@ -26,7 +33,15 @@
       display: block;
       margin: 5px 0;
     }
-    /* Стили для модальной плашки */
+    .rating-options {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 10px 0;
+    }
+    .rating-options label {
+      margin: 0 5px;
+    }
     .modal {
       display: none;
       position: fixed;
@@ -77,16 +92,40 @@
 
   <!-- Раздел 3: Инструкция к тесту включённых фигур -->
   <div class="section" id="section3">
-    <h2>Тест включённых фигур</h2>
+    <h2>Инструкция</h2>
     <p>
-      Вам будут предъявлены сложные фигуры (изображения). В каждой из них спрятан один из простых эталонов.
-      Вы должны определить, какой из элементов содержится в рисунке, и указать его.
+      Вам будут предъявлены сложные фигуры (изображения), в каждой из которых имеется один из простых эталонов.
     </p>
     <p>
-      <b>Помните:</b>  
-      - Эталон будет примерно такого же размера и такого же расположения, как в образце.  
-      - В каждом рисунке только один эталон.  
-      - Время выполнения теста учитывается!
+      Вы должны найти в каждом случае, какой из этих элементов содержится в рисунке, и указать его.
+    </p>
+    <p>
+      В каждом сложном рисунке имеется один из следующих элементов:
+    </p>
+    <div class="image-grid">
+      <img src="https://alenabura.github.io/images/1.1.png" alt="Эталон 1">
+      <img src="https://alenabura.github.io/images/1.2.png" alt="Эталон 2">
+      <img src="https://alenabura.github.io/images/1.3.png" alt="Эталон 3">
+      <img src="https://alenabura.github.io/images/1.4.png" alt="Эталон 4">
+      <img src="https://alenabura.github.io/images/1.5.png" alt="Эталон 5">
+    </div>
+    <p>
+      Укажите в каждом случае, какой из этих элементов содержится в рисунке. Например:
+    </p>
+    <div>
+      <img src="https://alenabura.github.io/images/primer.png" alt="Пример" style="width:150px;">
+    </div>
+    <br>
+    <p>
+      Помните:
+    </p>
+    <ul>
+      <li>В каждом рисунке имеется один из элементов приблизительно той же величины(*) и так же расположенный, как на образце.</li>
+      <li>В каждом рисунке имеется только один из элементов.</li>
+      <li>Время выполнения теста учитывается при расчёте результата.</li>
+    </ul>
+    <p>
+      (*) При прохождении теста на мобильных устройствах размеры образцов будут меньше, чем на фигуре.
     </p>
     <button onclick="startFiguresTest()">Начать тест включённых фигур</button>
   </div>
@@ -94,11 +133,7 @@
   <!-- Раздел 4: Сам тест включённых фигур -->
   <div class="section" id="section4">
     <h2>Тест включённых фигур — вопросы</h2>
-    <p>Ниже упрощённый пример на 2 изображения (в реальности у вас будет 30).</p>
-
-    <!-- Место для динамического вывода фигур -->
     <div id="figureTestContainer"></div>
-
     <button id="nextFigureButton" style="display: none;" onclick="nextFigure()">Следующая фигура</button>
   </div>
 
@@ -118,20 +153,14 @@
       После этого вы ответите на несколько демографических вопросов.  
       Ваши ответы будут анонимны и будут использованы только для научных целей. Спасибо!
     </p>
-    <!-- 50/50 картинка рядом с инструкцией -->
     <div id="artInstructionImage" style="margin: 10px 0;"></div>
-
     <button onclick="startArtRatingTest()">Начать оценку</button>
   </div>
 
   <!-- Раздел 7: Оценка произведений искусства -->
   <div class="section" id="section7">
     <h2>Оценка произведений искусства</h2>
-    <p>Здесь пример на 2 картины (в реальности у вас 6).</p>
-
-    <!-- Место для динамического вывода картин -->
     <div id="artRatingContainer"></div>
-
     <button id="nextArtButton" style="display: none;" onclick="nextArt()">Следующая картина</button>
   </div>
 
@@ -142,11 +171,11 @@
   <script>
     // Глобальный объект, где будем хранить все ответы
     const surveyData = {
-      startFiguresTime: 0,  // Время начала теста включённых фигур (мс)
-      endFiguresTime: 0,    // Время окончания
-      figuresAnswers: [],   // Массив ответов (какой эталон выбрал)
-      artRatings: [],       // Оценки произведений искусства
-      showArtInstructionImage: false, // Показывалась ли картинка в разделе 6
+      startFiguresTime: 0,
+      endFiguresTime: 0,
+      figuresAnswers: [],
+      artRatings: [],
+      showArtInstructionImage: false,
     };
 
     // Показываем/скрываем разделы
@@ -160,47 +189,33 @@
       surveyData.age = document.getElementById("age").value.trim();
       surveyData.gender = document.querySelector('input[name="gender"]:checked')?.value;
       surveyData.education = document.querySelector('input[name="education"]:checked')?.value;
-
       goToSection(3);
     }
 
     // Когда нажимаем "Начать тест включённых фигур"
     function startFiguresTest() {
-      // Засекаем время
       surveyData.startFiguresTime = Date.now();
-      // Переходим к разделу 4
       goToSection(4);
-      currentFigureIndex = 0; // Начинаем с первой картинки
+      currentFigureIndex = 0;
       renderFiguresTest();
     }
 
-    // Пример данных для теста включённых фигур (упрощённо, 2 картинки)
+    // Пример данных для теста включённых фигур
     const figureTestData = [
       {
         id: 1,
-        bigImage: "images/1.png",
+        bigImage: "https://alenabura.github.io/images/1.png",
         options: [
-          "images/1.1.png",
-          "images/1.2.png",
-          "images/1.3.png",
-          "images/1.4.png",
-          "images/1.5.png",
+          "https://alenabura.github.io/images/1.1.png",
+          "https://alenabura.github.io/images/1.2.png",
+          "https://alenabura.github.io/images/1.3.png",
+          "https://alenabura.github.io/images/1.4.png",
+          "https://alenabura.github.io/images/1.5.png",
         ]
       },
-      {
-        id: 2,
-        bigImage: "images/2.png",
-        options: [
-          "images/1.1.png",
-          "images/1.2.png",
-          "images/1.3.png",
-          "images/1.4.png",
-          "images/1.5.png",
-        ]
-      }
     ];
 
-    let currentFigureIndex = 0; // Текущая картинка
+    let currentFigureIndex = 0;
 
     // Рисуем вопросы для теста включённых фигур
     function renderFiguresTest() {
@@ -209,19 +224,12 @@
 
       const fig = figureTestData[currentFigureIndex];
       const figDiv = document.createElement("div");
-      figDiv.style.border = "1px solid #ccc";
       figDiv.style.marginBottom = "20px";
-      figDiv.style.padding = "10px";
-
-      // Заголовок
-      const title = document.createElement("h3");
-      title.textContent = `Фигура №${currentFigureIndex + 1}`;
-      figDiv.appendChild(title);
 
       // Большая картинка
       const bigImg = document.createElement("img");
       bigImg.src = fig.bigImage;
-      bigImg.style.width = "200px";
+      bigImg.style.width = "300px";
       figDiv.appendChild(bigImg);
 
       // Сетка с 5 вариантами
@@ -232,12 +240,9 @@
         const optImg = document.createElement("img");
         optImg.src = optionSrc;
         optImg.addEventListener("click", () => {
-          // Сохраняем выбор
-          surveyData.figuresAnswers[currentFigureIndex] = optIndex + 1; // Исправлено: сохраняем номер варианта (1-5)
-          // Подсвечиваем выбранную
+          surveyData.figuresAnswers[currentFigureIndex] = optIndex + 1;
           grid.querySelectorAll("img").forEach(img => img.classList.remove("selected"));
           optImg.classList.add("selected");
-          // Показываем кнопку "Следующая фигура"
           document.getElementById("nextFigureButton").style.display = "block";
         });
         grid.appendChild(optImg);
@@ -254,7 +259,6 @@
         renderFiguresTest();
         document.getElementById("nextFigureButton").style.display = "none";
       } else {
-        // Если фигуры закончились, завершаем тест
         finishFiguresTest();
       }
     }
@@ -267,28 +271,33 @@
 
     // Раздел 6: 50/50 показывать картинку
     window.addEventListener("DOMContentLoaded", () => {
-      // 50% вероятность
       surveyData.showArtInstructionImage = Math.random() < 0.5;
       if (surveyData.showArtInstructionImage) {
-        const img = document.createElement("img");
-        img.src = "images/car.png";
-        img.style.width = "200px";
-        document.getElementById("artInstructionImage").appendChild(img);
+        const imgContainer = document.getElementById("artInstructionImage");
+        const img1 = document.createElement("img");
+        img1.src = "https://alenabura.github.io/images/car.png";
+        img1.style.width = "150px";
+        imgContainer.appendChild(img1);
+
+        const img2 = document.createElement("img");
+        img2.src = "https://alenabura.github.io/images/shop.png";
+        img2.style.width = "150px";
+        imgContainer.appendChild(img2);
       }
     });
 
     // Пример данных для оценки произведений искусства
     const artData = [
-      { id: 1, src: "images/1p.jpg" },
-      { id: 2, src: "images/2p.jpg" },
+      { id: 1, src: "https://alenabura.github.io/images/1p.png" },
+      { id: 2, src: "https://alenabura.github.io/images/2p.png" },
     ];
 
-    let currentArtIndex = 0; // Текущая картина
+    let currentArtIndex = 0;
 
     // Начало теста оценки произведений искусства
     function startArtRatingTest() {
       goToSection(7);
-      currentArtIndex = 0; // Начинаем с первой картины
+      currentArtIndex = 0;
       renderArtRating();
     }
 
@@ -307,11 +316,17 @@
 
       const artImg = document.createElement("img");
       artImg.src = art.src;
-      artImg.style.width = "200px";
+      artImg.style.width = "300px";
       artDiv.appendChild(artImg);
 
       // Радио-кнопки 1-10
       const ratingDiv = document.createElement("div");
+      ratingDiv.className = "rating-options";
+
+      const leftLabel = document.createElement("span");
+      leftLabel.textContent = "Очень дёшево";
+      ratingDiv.appendChild(leftLabel);
+
       for (let i = 1; i <= 10; i++) {
         const label = document.createElement("label");
         label.style.marginRight = "5px";
@@ -322,8 +337,7 @@
         radio.value = i.toString();
 
         radio.addEventListener("change", () => {
-          surveyData.artRatings[currentArtIndex] = i; // Сохраняем выбранную оценку
-          // Показываем кнопку "Следующая картина"
+          surveyData.artRatings[currentArtIndex] = i;
           document.getElementById("nextArtButton").style.display = "block";
         });
 
@@ -331,8 +345,12 @@
         label.appendChild(document.createTextNode(i + " "));
         ratingDiv.appendChild(label);
       }
-      artDiv.appendChild(ratingDiv);
 
+      const rightLabel = document.createElement("span");
+      rightLabel.textContent = "Очень дорого";
+      ratingDiv.appendChild(rightLabel);
+
+      artDiv.appendChild(ratingDiv);
       container.appendChild(artDiv);
     }
 
@@ -343,7 +361,6 @@
         renderArtRating();
         document.getElementById("nextArtButton").style.display = "none";
       } else {
-        // Если картины закончились, завершаем тест и отправляем данные
         submitAllData();
       }
     }
@@ -360,11 +377,9 @@
 
     // Финальная отправка всех данных
     async function submitAllData() {
-      // Считаем общее время теста включённых фигур
       const figuresTimeSec = (surveyData.endFiguresTime - surveyData.startFiguresTime) / 1000;
       surveyData.figuresTimeSec = figuresTimeSec;
 
-      // Теперь отправляем всё на сервер
       try {
         const response = await fetch("/submit", {
           method: "POST",
