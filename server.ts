@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 
 // Вставьте сюда ваш реальный URL из Google Apps Script
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzPb150R0PMCJMv46N_0-cMRE8eCo2I_AWE8NIIlP0tc7BvvNgbneFrQrBceuE72FVdHw/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxTcH7xi5u8C_x2mUL2VSBB23Qzh7Q1nEeBmy2ShaRycFQXdsmRKGEcXK-_T3RqaHWfsg/exec";
 
 serve(async (req) => {
   const url = new URL(req.url);
