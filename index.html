@@ -59,8 +59,71 @@
 <body>
   <h1>Опрос</h1>
 
-  <!-- Разделы 1-5 остаются без изменений -->
+<!-- Раздел 1: Приветствие -->
+  <div class="section active" id="section1">
+    <p>Здравствуйте! Приглашаем Вас принять участие в опросе. Опрос состоит из нескольких разделов. Среднее время заполнения — 10-15 минут. Ваше участие очень важно для нас! Благодарим за внимание и участие!</p>
+    <button onclick="goToSection(2)">Начать</button>
+  </div>
 
+  <!-- Раздел 2: Общие вопросы -->
+  <div class="section" id="section2">
+    <h2>Общие вопросы</h2>
+    <label>
+      Укажите Ваш возраст:
+      <input type="number" id="age" />
+    </label>
+    <br><br>
+    <div class="radio-group">
+      Укажите Ваш биологический пол:
+      <label><input type="radio" name="gender" value="м"> Мужской</label>
+      <label><input type="radio" name="gender" value="ж"> Женский</label>
+    </div>
+    <br>
+    <div class="radio-group">
+      Укажите Ваш уровень образования:
+      <label><input type="radio" name="education" value="Среднее"> Среднее образование</label>
+      <label><input type="radio" name="education" value="Среднее специальное"> Среднее специальное</label>
+      <label><input type="radio" name="education" value="Студент"> Студент</label>
+      <label><input type="radio" name="education" value="Высшее"> Высшее образование</label>
+    </div>
+    <br><br>
+    <button onclick="saveSection2()">Перейти к следующему разделу</button>
+  </div>
+
+  <!-- Раздел 3: Инструкция к тесту включённых фигур -->
+  <div class="section" id="section3">
+    <h2>Тест включённых фигур</h2>
+    <p>
+      Вам будут предъявлены сложные фигуры (изображения). В каждой из них спрятан один из простых эталонов.
+      Вы должны определить, какой из элементов содержится в рисунке, и указать его.
+    </p>
+    <p>
+      <b>Помните:</b>  
+      - Эталон будет примерно такого же размера и такого же расположения, как в образце.  
+      - В каждом рисунке только один эталон.  
+      - Время выполнения теста учитывается!
+    </p>
+    <button onclick="startFiguresTest()">Начать тест включённых фигур</button>
+  </div>
+
+  <!-- Раздел 4: Сам тест включённых фигур -->
+  <div class="section" id="section4">
+    <h2>Тест включённых фигур — вопросы</h2>
+    <p>Ниже упрощённый пример на 2 изображения (в реальности у вас будет 30).</p>
+
+    <!-- Место для динамического вывода фигур -->
+    <div id="figureTestContainer"></div>
+
+    <button id="nextFigureButton" style="display: none;" onclick="nextFigure()">Следующая фигура</button>
+  </div>
+
+  <!-- Раздел 5: Завершение теста фигур -->
+  <div class="section" id="section5">
+    <h2>Тест включённых фигур пройден!</h2>
+    <p>Переходите к следующему разделу.</p>
+    <button onclick="goToSection(6)">Перейти к следующему разделу</button>
+  </div>
+  
   <!-- Раздел 6: Инструкция к оценке произведений искусства -->
   <div class="section" id="section6">
     <h2>Оценка произведений искусства</h2>
