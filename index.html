@@ -380,6 +380,8 @@
       const figuresTimeSec = (surveyData.endFiguresTime - surveyData.startFiguresTime) / 1000;
       surveyData.figuresTimeSec = figuresTimeSec;
 
+     console.log("Отправляемые данные:", JSON.stringify(surveyData));
+
       try {
         const response = await fetch("/submit", {
           method: "POST",
