@@ -504,6 +504,11 @@
         showModal("Произошла ошибка при отправке.", 5000);
       }
     }
+     // Инициализация
+    window.addEventListener('load', () => {
+      loadState();
+      goToSection(state.currentSection);
+    });
   </script>
 </body>
 </html>
