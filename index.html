@@ -480,30 +480,30 @@
     }
 
     // Отправка данных
-    async function submitData() {
-      const payload = {
-        ...state.surveyData,
-        timeSpentFigures: state.timeSpentFigures, // Добавляем время фигур
-        figuresAnswers: state.surveyData.figuresAnswers.join(','),
-        artRatings: state.surveyData.artRatings.join(',')
-      };
+  // Финальная отправка всех данных
+    async function submitAllData() {
+      const figuresTimeSec = (surveyData.endFiguresTime - surveyData.startFiguresTime) / 1000;
+      surveyData.figuresTimeSec = figuresTimeSec;
+
+      console.log("Отправляемые данные:", JSON.stringify(surveyData));
 
       try {
-        await fetch('/submit', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify(payload)
+        const response = await fetch("/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(surveyData),
         });
+
+        if (response.ok) {
+          showModal("Данные успешно отправлены! Спасибо за участие.");
+        } else {
+          showModal("Ошибка при отправке данных.", 5000);
+        }
       } catch (error) {
-        console.error('Ошибка отправки:', error);
+        console.error("Ошибка:", error);
+        showModal("Произошла ошибка при отправке.", 5000);
       }
     }
-
-    // Инициализация
-    window.addEventListener('load', () => {
-      loadState();
-      goToSection(state.currentSection);
-    });
   </script>
 </body>
 </html>
