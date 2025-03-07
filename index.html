@@ -422,25 +422,30 @@
     ];
 
     let currentArtIndex = 0;
-    
-    function startArtRatingTest() {
-      state.surveyData.showArtInstructionImage = Math.random() < 0.5;
 
+    function startArtRatingTest() {
+      // Устанавливаем случайное значение для showArtInstructionImage
+      state.surveyData.showArtInstructionImage = Math.random() < 0.5;
+    
+      // Очищаем контейнер для изображений
+      const artInstructionImages = document.getElementById('artInstructionImages');
+      artInstructionImages.innerHTML = '';
+    
+      // Если showArtInstructionImage равно true, добавляем изображения "шоп" и "кар"
       if (state.surveyData.showArtInstructionImage) {
-        document.getElementById('artInstructionImages').innerHTML = `
+        artInstructionImages.innerHTML = `
           <img src="https://alenabura.github.io/images/car.png" class="big-image">
           <img src="https://alenabura.github.io/images/shop.png" class="big-image">
         `;
-      } else {
-        document.getElementById('artInstructionImages').innerHTML = '';
       }
-
-      saveState(); // Сохраняем обновлённое значение
+      // Сохраняем состояние
+      saveState();
+      // Переходим на раздел "Оценка произведений искусства"
       goToSection(6);
-      renderArt(); // ВАЖНО: вызываем, чтобы сразу показать первую картину
+      // Рендерим первую картину
+      renderArt();
     }
-
-
+  
     function renderArt() {
       const container = document.getElementById('artRatingContainer');
       const current = artData[currentArtIndex];
@@ -457,11 +462,10 @@
           ).join('')}
         </div>
       `;
-
-     
+    
+      // Активируем кнопку "Далее", если рейтинг выбран
       document.getElementById('nextArtButton').disabled = state.surveyData.artRatings[currentArtIndex] === undefined;
     }
-
     function selectRating(rating) {
       state.surveyData.artRatings[currentArtIndex] = rating;
       document.getElementById('nextArtButton').disabled = false;
