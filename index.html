@@ -2,185 +2,338 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
   <title>Большой тест</title>
   <style>
-    .section { display: none; }
-    .section.active { display: block; }
-    .image-grid {
+    /* Base styles */
+    :root {
+      --primary-color: #4CAF50;
+      --secondary-color: #2196F3;
+      --error-color: #f44336;
+      --text-color: #333;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      color: var(--text-color);
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    /* Sections */
+    .section {
+      display: none;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    /* Buttons */
+    .button-group {
+      margin-top: 30px;
       display: flex;
       gap: 10px;
-      margin: 10px 0;
+      flex-wrap: wrap;
     }
-    .image-grid img {
-      width: 100px;
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
       cursor: pointer;
-      border: 2px solid transparent;
+      font-size: 16px;
+      transition: background-color 0.3s;
+      flex: 1;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    button.secondary {
+      background-color: var(--secondary-color);
+    }
+
+    /* Images */
+    .image-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .image-grid img {
+      width: 170px; /* По умолчанию будет как у главной картинки */
+      max-width: 180%; /* Ориентируемся на размер .big-image */
+      cursor: pointer;
+      border: 1px solid #999; 
       transition: all 0.3s ease;
       background: rgba(0,0,0,0.1);
       border-radius: 4px;
+      flex-shrink: 0;
     }
     .image-grid img:hover {
-      filter: brightness(0.9);
-      border-color: #888;
+      filter: brightness(85%); /* Затемнение на 15% при наведении */
+      border: 1px solid #666; /* Более заметная граница */
     }
-    .image-grid img.selected {
-      border: 2px solid red;
+    /* Главная картинка */
+    .big-image {
+      width: 300px;
+      max-width: 100%;
+      margin: 20px auto;
+      display: block;
     }
+
+    /* Если экран меньше 768px (планшеты и телефоны), уменьшаем картинки-варианты */
+    @media (max-width: 768px) {
+      .image-grid img {
+        width: 18%;
+        max-width: 80px;
+      }
+    }
+
+
     .radio-group {
-      margin: 10px 0;
+      margin: 20px 0;
     }
+
     .radio-group label {
       display: block;
-      margin: 5px 0;
-    }
-    .rating-options {
-      display: flex;
-      align-items: center;
-      gap: 10px;
       margin: 10px 0;
+      padding: 10px;
+      background: #f8f8f8;
+      border-radius: 4px;
     }
-    .rating-options label {
-      margin: 0 5px;
+
+    /* Progress */
+    .progress {
+      width: 100%;
+      height: 8px;
+      background: #eee;
+      border-radius: 4px;
+      margin: 20px 0;
     }
-    .modal {
-      display: none;
+
+    .progress-bar {
+      height: 100%;
+      background: var(--secondary-color);
+      border-radius: 4px;
+      transition: width 0.3s;
+    }
+
+    /* Timer */
+    .timer {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      background-color: #4CAF50;
-      color: white;
-      padding: 15px;
-      border-radius: 5px;
-      z-index: 1000;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      top: 10px;
+      right: 10px;
+      background: #fff;
+      padding: 8px 16px;
+      border-radius: 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    
+    
+    /* Mobile styles */
+    @media (max-width: 768px) {
+      body {
+        padding: 10px;
+      }
+
+      .image-grid img {
+        width: 50%;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .timer {
+        top: auto;
+        bottom: 10px;
+        right: 10px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Опрос</h1>
-
-<!-- Раздел 1: Приветствие -->
-  <div class="section active" id="section1">
-    <p>Здравствуйте! Приглашаем Вас принять участие в опросе. Опрос состоит из нескольких разделов. Среднее время заполнения — 10-15 минут. Ваше участие очень важно для нас! Благодарим за внимание и участие!</p>
-    <button onclick="goToSection(2)">Начать</button>
+  <!-- Изменён текст таймера -->
+  <div class="timer" id="timer">Время теста: 0 сек</div>
+  <div class="progress">
+    <div class="progress-bar" id="progressBar"></div>
   </div>
 
-  <!-- Раздел 2: Общие вопросы -->
+  <!-- Section 1: Welcome -->
+  <div class="section active" id="section1">
+    <h1>Опрос</h1>
+    <p>Здравствуйте! Приглашаем Вас принять участие в опросе. Опрос состоит из нескольких разделов. Среднее время заполнения — 10-15 минут. Ваше участие очень важно для нас! Благодарим за внимание и участие!</p>
+    <div class="button-group">
+      <button onclick="goToSection(2)">Начать</button>
+    </div>
+  </div>
+
+  <!-- Section 2: General questions -->
   <div class="section" id="section2">
     <h2>Общие вопросы</h2>
     <label>
       Укажите Ваш возраст:
-      <input type="number" id="age" />
+      <input type="number" id="age" min="1" max="120">
     </label>
-    <br><br>
+
     <div class="radio-group">
-      Укажите Ваш биологический пол:
+      <p>Укажите Ваш биологический пол:</p>
       <label><input type="radio" name="gender" value="м"> Мужской</label>
       <label><input type="radio" name="gender" value="ж"> Женский</label>
     </div>
-    <br>
+
     <div class="radio-group">
-      Укажите Ваш уровень образования:
+      <p>Укажите Ваш уровень образования:</p>
       <label><input type="radio" name="education" value="Среднее"> Среднее образование</label>
       <label><input type="radio" name="education" value="Среднее специальное"> Среднее специальное</label>
       <label><input type="radio" name="education" value="Студент"> Студент</label>
       <label><input type="radio" name="education" value="Высшее"> Высшее образование</label>
     </div>
-    <br><br>
-    <button onclick="saveSection2()">Перейти к следующему разделу</button>
+
+    <div class="button-group">
+      <button class="secondary" onclick="goToSection(1)">Назад</button>
+      <button onclick="saveSection2()">Далее</button>
+    </div>
   </div>
 
-  <!-- Раздел 3: Инструкция к тесту включённых фигур -->
+  <!-- Section 3: Figures test instruction -->
   <div class="section" id="section3">
     <h2>Тест включённых фигур</h2>
-    <p>
-      Вам будут предъявлены сложные фигуры (изображения). В каждой из них спрятан один из простых эталонов.
-      Вы должны определить, какой из элементов содержится в рисунке, и указать его.
-    </p>
-    <p>
-      <b>Помните:</b>  
-      - Эталон будет примерно такого же размера и такого же расположения, как в образце.  
-      - В каждом рисунке только один эталон.  
-      - Время выполнения теста учитывается!
-    </p>
-    <button onclick="startFiguresTest()">Начать тест включённых фигур</button>
+    <p>ИНСТРУКЦИЯ:</p>
+    <p>Вам будут предъявлены сложные фигуры (изображения), в каждой из которых имеется один из простых эталонов. Вы должны найти в каждом случае, какой из этих элементов содержится в рисунке, и указать его.<p>
+    <p>В каждом сложном рисунке имеется один из следующих элементов:</p>
+    <div class="example-images">
+      <img src="https://alenabura.github.io/images/1.1.png" style="width: 90px">
+      <img src="https://alenabura.github.io/images/1.2.png" style="width: 90px">
+      <img src="https://alenabura.github.io/images/1.3.png" style="width: 90px">
+      <img src="https://alenabura.github.io/images/1.4.png" style="width: 90px">
+      <img src="https://alenabura.github.io/images/1.5.png" style="width: 90px">
+    </div>
+    <p>Укажите в каждом случае, какой из этих элементов содержится в рисунке. Например:</p>
+    <img src="https://alenabura.github.io/images/primer.png" style="width: 170px">
+    <p>Помните:<p>
+    <p>• В каждом рисунке имеется один из элементов приблизительно той же величины(*) и так же расположенный, как на образце.<p>
+    • В каждом рисунке имеется только один из элементов.<p>
+    • Время выполнения теста учитывается при расчете результата.<p>
+    (*) При прохождении теста на мобильных устройствах размеры образцов будут меньше, чем на фигуре.</p>
+    <div class="button-group">
+      <button class="secondary" onclick="goToSection(2)">Назад</button>
+      <button onclick="startFiguresTest()">Начать тест</button>
+    </div>
   </div>
 
-  <!-- Раздел 4: Сам тест включённых фигур -->
+  <!-- Section 4: Figures test -->
   <div class="section" id="section4">
-    <h2>Тест включённых фигур — вопросы</h2>
-    <p>Ниже упрощённый пример на 2 изображения (в реальности у вас будет 30).</p>
-
-    <!-- Место для динамического вывода фигур -->
+    <h2>Тест включённых фигур <span id="currentFigure"></span></h2>
     <div id="figureTestContainer"></div>
-
-    <button id="nextFigureButton" style="display: none;" onclick="nextFigure()">Следующая фигура</button>
+    <div class="button-group">
+      <button class="secondary" onclick="goToSection(3)">Назад</button>
+      <button id="nextFigureButton" onclick="nextFigure()" disabled>Далее</button>
+    </div>
   </div>
 
-  <!-- Раздел 5: Завершение теста фигур -->
+  <!-- Section 5: Art rating instruction -->
   <div class="section" id="section5">
-    <h2>Тест включённых фигур пройден!</h2>
-    <p>Переходите к следующему разделу.</p>
-    <button onclick="goToSection(6)">Перейти к следующему разделу</button>
+    <h2>Оценка произведений искусства</h2>
+    <p>Вам будут предъявлены 6 картин, и вам нужно будет оценить их стоимость по шкале от 1 (очень дешево) до 10 (очень дорого).<p>
+    <div id="artInstructionImages"></div>
+    <div class="button-group">
+      <button onclick="startArtRatingTest()">Начать</button>
+    </div>
   </div>
-  
-  <!-- Раздел 6: Инструкция к оценке произведений искусства -->
+
+  <!-- Section 6: Art rating -->
   <div class="section" id="section6">
-    <h2>Оценка произведений искусства</h2>
-    <p>
-      Следующий раздел будет посвящён оценке произведений искусства. Ваше участие займёт около 15 минут.  
-      Вам будет предложено оценить финансовую стоимость нескольких произведений искусства по шкале от 1 (совсем не дорого) до 10 (очень дорого).  
-      После этого вы ответите на несколько демографических вопросов.  
-      Ваши ответы будут анонимны и будут использованы только для научных целей. Спасибо!
-    </p>
-    <div id="artInstructionImage" style="margin: 10px 0;"></div>
-    <button onclick="startArtRatingTest()">Начать оценку</button>
-  </div>
-
-  <!-- Раздел 7: Оценка произведений искусства -->
-  <div class="section" id="section7">
-    <h2>Оценка произведений искусства</h2>
+    <h2>Оценка картин <span id="currentArt"></span></h2>
     <div id="artRatingContainer"></div>
-    <button id="nextArtButton" style="display: none;" onclick="nextArt()">Следующая картина</button>
+    <div class="button-group">
+      <button class="secondary" onclick="goToSection(5)">Назад</button>
+      <button id="nextArtButton" onclick="nextArt()" disabled>Далее</button>
+    </div>
   </div>
 
-  <!-- Модальная плашка для уведомлений -->
-  <div id="modal" class="modal"></div>
+  <!-- Section 7: Completion -->
+  <div class="section" id="section7">
+    <h2>Опрос завершён!</h2>
+    <p>Спасибо за Ваше участие! Ваши ответы были сохранены.</p>
+    <div class="button-group">
+      <button onclick="location.reload()">Начать заново</button>
+    </div>
+  </div>
 
-  <!-- Скрипт для логики переключения и сбора данных -->
   <script>
-    // Глобальный объект, где будем хранить все ответы
-    const surveyData = {
-      startFiguresTime: 0,
-      endFiguresTime: 0,
-      figuresAnswers: [],
-      artRatings: [], // Оценки картин
-      showArtInstructionImage: false,
+    // Обновлённое состояние
+    const state = {
+      currentSection: 1,
+      figuresTimerInterval: null, // Только для таймера фигур
+      timeSpentFigures: 0,        // Новое поле для времени фигур
+      surveyData: {
+        age: '',
+        gender: '',
+        education: '',
+        showArtInstructionImage: Math.random() < 0.5,
+        figuresAnswers: [],
+        artRatings: []
+      }
     };
 
-    // Показываем/скрываем разделы
-    function goToSection(num) {
-      document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
-      document.getElementById("section" + num).classList.add("active");
+    // Загрузка состояния из localStorage
+    function loadState() {
+      const saved = localStorage.getItem('surveyState');
+      if (saved) {
+        const savedState = JSON.parse(saved);
+        state.surveyData = savedState.surveyData;
+        state.timeSpentFigures = savedState.timeSpentFigures || 0;
+        state.currentSection = savedState.currentSection;
+      }
+      updateProgress();
     }
 
-    // Сохраняем данные раздела 2
+    // Сохранение состояния
+    function saveState() {
+      const stateToSave = { ...state };
+      delete stateToSave.figuresTimerInterval;
+      localStorage.setItem('surveyState', JSON.stringify(stateToSave));
+    }
+
+    // Навигация
+    function goToSection(num) {
+      state.currentSection = num;
+      document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
+      document.getElementById(`section${num}`).classList.add('active');
+      updateProgress();
+      saveState();
+    }
+
+    // Прогресс-бар
+    function updateProgress() {
+      const totalSections = 6;
+      const progress = ((state.currentSection - 1) / totalSections) * 100;
+      document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+
+    // Логика раздела 2
     function saveSection2() {
-      surveyData.age = document.getElementById("age").value.trim();
-      surveyData.gender = document.querySelector('input[name="gender"]:checked')?.value;
-      surveyData.education = document.querySelector('input[name="education"]:checked')?.value;
+      state.surveyData.age = document.getElementById('age').value;
+      state.surveyData.gender = document.querySelector('input[name="gender"]:checked')?.value;
+      state.surveyData.education = document.querySelector('input[name="education"]:checked')?.value;
       goToSection(3);
     }
 
-    // Когда нажимаем "Начать тест включённых фигур"
-    function startFiguresTest() {
-      surveyData.startFiguresTime = Date.now();
-      goToSection(4);
-      currentFigureIndex = 0;
-      renderFiguresTest();
-    }
-
-    // Пример данных для теста включённых фигур
+    // Данные для теста фигур
     const figureTestData = [
       {
         id: 1,
@@ -190,195 +343,167 @@
           "https://alenabura.github.io/images/1.2.png",
           "https://alenabura.github.io/images/1.3.png",
           "https://alenabura.github.io/images/1.4.png",
-          "https://alenabura.github.io/images/1.5.png",
+          "https://alenabura.github.io/images/1.5.png"
         ]
-      },
+      }
     ];
 
     let currentFigureIndex = 0;
 
-    // Рисуем вопросы для теста включённых фигур
-    function renderFiguresTest() {
-      const container = document.getElementById("figureTestContainer");
-      container.innerHTML = "";
+    function startFiguresTest() {
+      // Сброс и запуск таймера фигур
+      currentFigureIndex = 0;
+      state.timeSpentFigures = 0;
+      
+      // Обновление таймера каждую секунду
+      if (!state.figuresTimerInterval) {
+        state.figuresTimerInterval = setInterval(() => {
+          state.timeSpentFigures++;
+          document.getElementById('timer').textContent = `Время теста: ${state.timeSpentFigures} сек`;
+          saveState();
+        }, 1000);
+      }
 
-      const fig = figureTestData[currentFigureIndex];
-      const figDiv = document.createElement("div");
-      figDiv.style.marginBottom = "20px";
-
-      // Большая картинка
-      const bigImg = document.createElement("img");
-      bigImg.src = fig.bigImage;
-      bigImg.style.width = "300px";
-      figDiv.appendChild(bigImg);
-
-      // Сетка с 5 вариантами
-      const grid = document.createElement("div");
-      grid.className = "image-grid";
-
-      fig.options.forEach((optionSrc, optIndex) => {
-        const optImg = document.createElement("img");
-        optImg.src = optionSrc;
-        optImg.addEventListener("click", () => {
-          surveyData.figuresAnswers[currentFigureIndex] = optIndex + 1;
-          grid.querySelectorAll("img").forEach(img => img.classList.remove("selected"));
-          optImg.classList.add("selected");
-          document.getElementById("nextFigureButton").style.display = "block";
-        });
-        grid.appendChild(optImg);
-      });
-
-      figDiv.appendChild(grid);
-      container.appendChild(figDiv);
+      renderFigure();
+      goToSection(4);
     }
 
-    // Переход к следующей фигуре
-    function nextFigure() {
-      currentFigureIndex++;
-      if (currentFigureIndex < figureTestData.length) {
-        renderFiguresTest();
-        document.getElementById("nextFigureButton").style.display = "none";
+  
+    function renderFigure() {
+      const container = document.getElementById('figureTestContainer');
+      const current = figureTestData[currentFigureIndex];
+
+      container.innerHTML = `
+        <p>Вопрос: ${currentFigureIndex + 1} из ${figureTestData.length}</p>
+        <img src="${current.bigImage}" class="big-image">
+        <div class="image-grid">
+          ${current.options.map((src, i) => 
+            `<img src="${src}" onclick="selectFigure(${i})" ${state.surveyData.figuresAnswers[currentFigureIndex] === i ? 'class="selected"' : ''}>`
+          ).join('')}
+        </div>
+      `;
+
+      document.getElementById('currentFigure').textContent = ``; // Убираем "1/1" сверху
+    }
+
+
+  
+    function selectFigure(index) {
+      state.surveyData.figuresAnswers[currentFigureIndex] = index;
+      saveState(); // Сохраняем выбор
+      
+      // Если есть ещё фигуры — идём дальше, иначе переходим к следующему разделу
+      if (currentFigureIndex < figureTestData.length - 1) {
+        currentFigureIndex++;
+        renderFigure();
       } else {
-        finishFiguresTest();
+        clearInterval(state.figuresTimerInterval); // Останавливаем таймер
+        state.figuresTimerInterval = null;
+        goToSection(5); // Переход к следующему разделу
       }
     }
 
-    // Завершаем тест включённых фигур
-    function finishFiguresTest() {
-      surveyData.endFiguresTime = Date.now();
-      goToSection(5);
+    function nextFigure() {
+      if (currentFigureIndex < figureTestData.length - 1) {
+        currentFigureIndex++;
+        renderFigure();
+      } else {
+        // Остановка таймера фигур
+        clearInterval(state.figuresTimerInterval);
+        state.figuresTimerInterval = null;
+        goToSection(5);
+      }
     }
 
-    // Раздел 6: 50/50 показывать картинку
-    window.addEventListener("DOMContentLoaded", () => {
-      surveyData.showArtInstructionImage = Math.random() < 0.5;
-      if (surveyData.showArtInstructionImage) {
-        const imgContainer = document.getElementById("artInstructionImage");
-        const img1 = document.createElement("img");
-        img1.src = "https://alenabura.github.io/images/car.png";
-        img1.style.width = "150px";
-        imgContainer.appendChild(img1);
-
-        const img2 = document.createElement("img");
-        img2.src = "https://alenabura.github.io/images/shop.png";
-        img2.style.width = "150px";
-        imgContainer.appendChild(img2);
-      }
-    });
-
-    // Пример данных для оценки произведений искусства
+    // Логика оценки произведений искусства
     const artData = [
       { id: 1, src: "https://alenabura.github.io/images/1p.png" },
-      { id: 2, src: "https://alenabura.github.io/images/2p.png" },
+      { id: 2, src: "https://alenabura.github.io/images/2p.png" }
     ];
 
     let currentArtIndex = 0;
-
-    // Начало теста оценки произведений искусства
+    
     function startArtRatingTest() {
-      goToSection(7);
-      currentArtIndex = 0;
-      renderArtRating();
-    }
+      state.surveyData.showArtInstructionImage = Math.random() < 0.5;
 
-    // Рендерим текущую картину
-    function renderArtRating() {
-      const container = document.getElementById("artRatingContainer");
-      container.innerHTML = "";
-
-      const art = artData[currentArtIndex];
-      const artDiv = document.createElement("div");
-      artDiv.style.marginBottom = "20px";
-
-      const title = document.createElement("h3");
-      title.textContent = `Картина №${currentArtIndex + 1}`;
-      artDiv.appendChild(title);
-
-      const artImg = document.createElement("img");
-      artImg.src = art.src;
-      artImg.style.width = "300px";
-      artDiv.appendChild(artImg);
-
-      // Радио-кнопки 1-10
-      const ratingDiv = document.createElement("div");
-      ratingDiv.className = "rating-options";
-
-      const leftLabel = document.createElement("span");
-      leftLabel.textContent = "Очень дёшево";
-      ratingDiv.appendChild(leftLabel);
-
-      for (let i = 1; i <= 10; i++) {
-        const label = document.createElement("label");
-        label.style.marginRight = "5px";
-
-        const radio = document.createElement("input");
-        radio.type = "radio";
-        radio.name = "artRating" + currentArtIndex;
-        radio.value = i.toString();
-
-        radio.addEventListener("change", () => {
-          surveyData.artRatings[currentArtIndex] = i;
-          document.getElementById("nextArtButton").style.display = "block";
-        });
-
-        label.appendChild(radio);
-        label.appendChild(document.createTextNode(i + " "));
-        ratingDiv.appendChild(label);
-      }
-
-      const rightLabel = document.createElement("span");
-      rightLabel.textContent = "Очень дорого";
-      ratingDiv.appendChild(rightLabel);
-
-      artDiv.appendChild(ratingDiv);
-      container.appendChild(artDiv);
-    }
-
-    // Переход к следующей картине
-    function nextArt() {
-      currentArtIndex++;
-      if (currentArtIndex < artData.length) {
-        renderArtRating();
-        document.getElementById("nextArtButton").style.display = "none";
+      if (state.surveyData.showArtInstructionImage) {
+        document.getElementById('artInstructionImages').innerHTML = `
+          <img src="https://alenabura.github.io/images/car.png" class="big-image">
+          <img src="https://alenabura.github.io/images/shop.png" class="big-image">
+        `;
       } else {
-        submitAllData();
+        document.getElementById('artInstructionImages').innerHTML = '';
+      }
+
+      saveState(); // Сохраняем обновлённое значение
+      goToSection(6);
+      renderArt(); // ВАЖНО: вызываем, чтобы сразу показать первую картину
+    }
+
+
+    function renderArt() {
+      const container = document.getElementById('artRatingContainer');
+      const current = artData[currentArtIndex];
+      
+      container.innerHTML = `
+        <p>Картина: ${currentArtIndex + 1} из ${artData.length}</p>
+        <img src="${current.src}" class="big-image">
+        <div class="radio-group">
+          ${Array.from({length: 10}, (_, i) => 
+            `<label>
+              <input type="radio" name="artRating" value="${i + 1}" ${state.surveyData.artRatings[currentArtIndex] === i + 1 ? 'checked' : ''} onchange="selectRating(${i + 1})">
+              ${i + 1}
+            </label>`
+          ).join('')}
+        </div>
+      `;
+
+     
+      document.getElementById('nextArtButton').disabled = state.surveyData.artRatings[currentArtIndex] === undefined;
+    }
+
+    function selectRating(rating) {
+      state.surveyData.artRatings[currentArtIndex] = rating;
+      document.getElementById('nextArtButton').disabled = false;
+      saveState();
+    }
+
+    function nextArt() {
+      if (currentArtIndex < artData.length - 1) {
+        currentArtIndex++;
+        renderArt();
+      } else {
+        submitData();
+        goToSection(7);
+        localStorage.removeItem('surveyState');
       }
     }
 
-    // Функция для отображения модальной плашки
-    function showModal(message, duration = 3000) {
-      const modal = document.getElementById("modal");
-      modal.textContent = message;
-      modal.style.display = "block";
-      setTimeout(() => {
-        modal.style.display = "none";
-      }, duration);
-    }
-
-    // Финальная отправка всех данных
-    async function submitAllData() {
-      const figuresTimeSec = (surveyData.endFiguresTime - surveyData.startFiguresTime) / 1000;
-      surveyData.figuresTimeSec = figuresTimeSec;
-
-      console.log("Отправляемые данные:", JSON.stringify(surveyData));
+    // Отправка данных
+    async function submitData() {
+      const payload = {
+        ...state.surveyData,
+        timeSpentFigures: state.timeSpentFigures, // Добавляем время фигур
+        figuresAnswers: state.surveyData.figuresAnswers.join(','),
+        artRatings: state.surveyData.artRatings.join(',')
+      };
 
       try {
-        const response = await fetch("/submit", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(surveyData),
+        await fetch('/submit', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload)
         });
-
-        if (response.ok) {
-          showModal("Данные успешно отправлены! Спасибо за участие.");
-        } else {
-          showModal("Ошибка при отправке данных.", 5000);
-        }
       } catch (error) {
-        console.error("Ошибка:", error);
-        showModal("Произошла ошибка при отправке.", 5000);
+        console.error('Ошибка отправки:', error);
       }
     }
+
+    // Инициализация
+    window.addEventListener('load', () => {
+      loadState();
+      goToSection(state.currentSection);
+    });
   </script>
 </body>
 </html>
