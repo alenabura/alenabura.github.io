@@ -479,36 +479,43 @@
       }
     }
 
-    // Отправка данных
-  // Финальная отправка всех данных
-    async function submitAllData() {
-      const figuresTimeSec = (surveyData.endFiguresTime - surveyData.startFiguresTime) / 1000;
-      surveyData.figuresTimeSec = figuresTimeSec;
-
+    // Функция для отправки данных
+    async function submitData() {
+      const surveyData = {
+        ...state.surveyData,
+        figuresTimeSec: state.timeSpentFigures
+      };
+    
       console.log("Отправляемые данные:", JSON.stringify(surveyData));
-
+    
       try {
         const response = await fetch("/submit", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(surveyData),
         });
-
+    
         if (response.ok) {
-          showModal("Данные успешно отправлены! Спасибо за участие.");
+          console.log("Данные успешно отправлены!");
         } else {
-          showModal("Ошибка при отправке данных.", 5000);
+          console.error("Ошибка при отправке данных.");
         }
       } catch (error) {
         console.error("Ошибка:", error);
-        showModal("Произошла ошибка при отправке.", 5000);
       }
     }
-     // Инициализация
-    window.addEventListener('load', () => {
-      loadState();
-      goToSection(state.currentSection);
-    });
+    
+    // Функция для перехода к следующей картине
+    function nextArt() {
+      if (currentArtIndex < artData.length - 1) {
+        currentArtIndex++;
+        renderArt();
+      } else {
+        submitData(); // Отправляем данные
+        goToSection(7); // Переходим на страницу завершения
+        localStorage.removeItem('surveyState'); // Очищаем сохранённое состояние
+      }
+    }
   </script>
 </body>
 </html>
