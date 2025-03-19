@@ -2,7 +2,7 @@ import { serve } from "https://deno.land/std@0.224.0/http/server.ts";
 import { extname, join } from "https://deno.land/std@0.224.0/path/mod.ts";
 
 // Вставь сюда свой реальный URL из Google Apps Script
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSnizrtuq-ShkATidtUeisD5EtdN7CgniKm6rxf0BY7enZ5nTUVV_M28CHuwmyA0t3/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxdWLJQr503cBk4Ov3WbEP2DrdzpXQMzLBLmpeiG90YU8l7C8IfU5iIUlAGneGXf8tbYw/exec";
 
 const mimeTypes: Record<string, string> = {
   ".jpg": "image/jpeg",
