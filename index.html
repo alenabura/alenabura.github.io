@@ -385,6 +385,7 @@
           showPrimingImages();
         },
         section4: () => {
+          console.log(state.figuresAnswers);
           if (state.figuresAnswers && state.figuresAnswers.length > 1) {
             currentFigureIndex = state.figuresAnswers.length - 1;
           }
