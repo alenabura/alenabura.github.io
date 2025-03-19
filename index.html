@@ -514,7 +514,7 @@
       }
 
       function selectFigure(index) {
-        state.surveyData.figuresAnswers[currentFigureIndex] = index;
+        state.surveyData.figuresAnswers[currentFigureIndex] = index + 1;
         saveState(); // Сохраняем выбор
 
         // Если есть ещё фигуры — идём дальше, иначе переходим к следующему разделу
@@ -532,6 +532,9 @@
       const artData = [
         { id: 1, src: "images/1p.jpg" },
         { id: 2, src: "images/2p.jpg" },
+        { id: 3, src: "images/3p.jpg" },
+        { id: 4, src: "images/4p.jpg" },
+        { id: 5, src: "images/5p.jpg" },
       ];
 
       let currentArtIndex = 0;
@@ -544,8 +547,8 @@
 
         if (state.surveyData.showArtInstructionImage) {
           document.getElementById("artInstructionImages").innerHTML = `
-          <img src="images/car.jpg" class="big-image">
-          <img src="images/shop.jpg" class="big-image">
+          <img src="images/car.jpg" class="big-image" style="display: inline-block;">
+          <img src="images/shop.jpg" class="big-image" style="display: inline-block;">
         `;
         } else {
           document.getElementById("artInstructionImages").innerHTML = "";
