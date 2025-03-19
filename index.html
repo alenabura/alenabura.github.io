@@ -338,7 +338,7 @@
 
     <script>
       // Обновлённое состояние
-      let state = {
+      const state = {
         currentSection: 1,
         figuresTimerInterval: null, // Только для таймера фигур
         timeSpentFigures: 0, // Новое поле для времени фигур
@@ -357,10 +357,9 @@
         const saved = localStorage.getItem("surveyState");
         if (saved) {
           const savedState = JSON.parse(saved);
-          state = Object.assign(state, savedState);
-          // state.surveyData = savedState.surveyData;
+          state.surveyData = savedState.surveyData;
           state.timeSpentFigures = savedState.timeSpentFigures || 0;
-          // state.currentSection = savedState.currentSection;
+          state.currentSection = savedState.currentSection;
           // if (state.currentSection === 4) {
           //   startFiguresTest();
           // }
@@ -386,9 +385,9 @@
           showPrimingImages();
         },
         section4: () => {
-          console.log(state.figuresAnswers);
-          if (state.figuresAnswers && state.figuresAnswers.length > 1) {
-            currentFigureIndex = state.figuresAnswers.length - 1;
+          const _figuresAnswers = state.surveyData.figuresAnswers;
+          if (_figuresAnswers && _figuresAnswers.length > 1) {
+            currentFigureIndex = _figuresAnswers.length - 1;
           }
           startFiguresTest();
         },
