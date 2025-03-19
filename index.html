@@ -357,7 +357,7 @@
         const saved = localStorage.getItem("surveyState");
         if (saved) {
           const savedState = JSON.parse(saved);
-          Object.assign(state, savedState);
+          state = Object.assign(state, savedState);
           // state.surveyData = savedState.surveyData;
           state.timeSpentFigures = savedState.timeSpentFigures || 0;
           // state.currentSection = savedState.currentSection;
