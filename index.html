@@ -385,6 +385,9 @@
           showPrimingImages();
         },
         section4: () => {
+          if (state.figuresAnswers && state.figuresAnswers.length > 1) {
+            currentFigureIndex = state.figuresAnswers.length - 1;
+          }
           startFiguresTest();
         },
       };
@@ -468,18 +471,12 @@
       }
 
       const figureTestData = generateFiguresTestData();
-
       let currentFigureIndex = 0;
 
       function startFiguresTest() {
         // Сброс и запуск таймера фигур
         if (typeof state.timeSpentFigures !== 'number') {
           state.timeSpentFigures = 0;
-        }
-        if (!state.figuresAnswers || state.figuresAnswers.length < 1) {
-          currentFigureIndex = 0;
-        } else {
-          currentFigureIndex = state.figuresAnswers.length - 1;
         }
         
         // Обновление таймера каждую секунду
@@ -658,7 +655,7 @@
 
       // Инициализация
       window.addEventListener("load", () => {
-        console.log(figureTestData);
+        // console.log(figureTestData);
         loadState();
         goToSection(state.currentSection);
       });
