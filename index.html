@@ -96,11 +96,15 @@
       }
       /* Главная картинка */
       .big-image {
-        max-width: 768px;
+        max-width: 300px;
         width: 100%;
         margin: 20px auto;
         display: block;
         min-height: 229px;
+      }
+
+      .big-image--lg {
+        max-width: 768px;
       }
 
       /* Если экран меньше 768px (планшеты и телефоны), уменьшаем картинки-варианты */
@@ -588,7 +592,7 @@
 
         container.innerHTML = `
         <p>Картина: ${currentArtIndex + 1} из ${artData.length}</p>
-        <img src="${current.src}" class="big-image">
+        <img src="${current.src}" class="big-image big-image--lg">
         <div class="radio-group">
           ${Array.from(
             { length: 10 },
