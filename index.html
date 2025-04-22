@@ -231,6 +231,29 @@
           образование</label
         >
       </div>
+      <div class="radio-group">
+        <p>Насколько вы разбираетесь в искусстве?:</p>
+        <label>
+          <input type="radio" name="artKnowledge" value="Очень плохо"> 
+          Очень плохо
+        </label>
+        <label>
+          <input type="radio" name="artKnowledge" value="Плохо"> 
+          Плохо
+        </label>
+        <label>
+          <input type="radio" name="artKnowledge" value="Нормально"> 
+          Нормально
+        </label>
+        <label>
+          <input type="radio" name="artKnowledge" value="Хорошо"> 
+          Хорошо
+        </label>
+        <label>
+          <input type="radio" name="artKnowledge" value="Очень хорошо"> 
+          Очень хорошо
+        </label>
+      </div>
 
       <div class="button-group">
         <button class="secondary" onclick="goToSection(1)">Назад</button>
@@ -329,7 +352,7 @@
       <div id="artRatingContainer"></div>
       <div class="button-group">
         <button class="secondary" onclick="goToSection(5)">Назад</button>
-        <button id="nextArtButton" onclick="nextArt()" disabled>Далее</button>
+        <button id="nextArtButton" onclick="nextArt()">Далее</button>
       </div>
     </div>
 
@@ -355,6 +378,7 @@
           showArtInstructionImage: null,
           figuresAnswers: [],
           artRatings: [],
+          purchaseRatings: []
         },
       };
 
@@ -431,10 +455,14 @@
         state.surveyData.education = document.querySelector(
           'input[name="education"]:checked'
         )?.value;
+        state.surveyData.artKnowledge = document.querySelector(
+          'input[name="artKnowledge"]:checked'
+        )?.value;
         if (
           !state.surveyData.age ||
           !state.surveyData.gender ||
-          !state.surveyData.education
+          !state.surveyData.education ||
+          !state.surveyData.artKnowledge
         ) {
           alert("Заполните все поля для продолжения");
           return;
@@ -594,7 +622,7 @@
 
         container.innerHTML = `
         <p>Картина: ${currentArtIndex + 1} из ${artData.length}</p>
-        <img src="${current.src}" class="big-image big-image--lg">
+        <img src="${current.src}" class="big-image big-image--lg"/>
         <div class="radio-group">
           ${Array.from(
             { length: 10 },
@@ -609,19 +637,42 @@
             </label>`
           ).join("")}
         </div>
+        <hr/>
+        <p>Купили бы Вы данную картину?</p>
+        <div class="radio-group">
+          <label>
+            <input onchange="selectPurchaseRating('Да')" type="radio" name="purchaseRating" ${state.surveyData?.purchaseRatings?.[currentArtIndex] === "Да" ? "checked" : ""} value="Да"/>
+            Да
+          </label>
+          <label>
+            <input onchange="selectPurchaseRating('Нет')" type="radio" name="purchaseRating" ${state.surveyData?.purchaseRatings?.[currentArtIndex] === "Нет" ? "checked" : ""} value="Нет"/>
+            Нет
+          </label>
+        </div>
       `;
 
-        document.getElementById("nextArtButton").disabled =
-          state.surveyData.artRatings[currentArtIndex] === undefined;
+        // document.getElementById("nextArtButton").disabled =
+        //   state.surveyData.artRatings[currentArtIndex] === undefined;
       }
 
       function selectRating(rating) {
         state.surveyData.artRatings[currentArtIndex] = rating;
-        document.getElementById("nextArtButton").disabled = false;
+        // document.getElementById("nextArtButton").disabled = false;
+        saveState();
+      }
+
+      function selectPurchaseRating(value){
+        state.surveyData.purchaseRatings[currentArtIndex] = value
         saveState();
       }
 
       function nextArt() {
+        if (state.surveyData.artRatings[currentArtIndex] === undefined ||
+            state.surveyData.purchaseRatings[currentArtIndex] === undefined
+        ) {
+          alert("Заполните все поля для продолжения");
+          return;
+        }
         if (currentArtIndex < artData.length - 1) {
           currentArtIndex++;
           renderArt();
@@ -641,7 +692,8 @@
         figuresTimeSec: state.timeSpentFigures
       };
     
-      console.log("Отправляемые данные:", JSON.stringify(surveyData));
+      console.log("Отправляемые данные:", JSON.stringify(surveyData), surveyData);
+      return; //TODO: временно
     
       try {
         const response = await fetch("/submit", {
