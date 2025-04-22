@@ -414,6 +414,12 @@
         section5: () => {
           showPrimingImages();
         },
+        section6: ()=> {
+          if (state.surveyData.artRatings.length > 0) {
+            currentArtIndex = state.surveyData.artRatings.length;
+          }
+          renderArt();
+        },
         section4: () => {
           const _figuresAnswers = state.surveyData.figuresAnswers;
           if (_figuresAnswers && _figuresAnswers.length > 0) {
@@ -432,6 +438,7 @@
         document.getElementById(`section${num}`).classList.add("active");
         updateProgress();
         const onLoad = sectionsHooks[`section${num}`];
+        // console.log(num);
         if (typeof onLoad === "function") {
           onLoad();
         }
@@ -596,7 +603,7 @@
       function startArtRatingTest() {
         saveState();
         goToSection(6);
-        renderArt(); // ВАЖНО: вызываем, чтобы сразу показать первую картину
+        //renderArt(); // ВАЖНО: вызываем, чтобы сразу показать первую картину
       }
 
       // function startArtRatingTest() {
@@ -658,12 +665,12 @@
       function selectRating(rating) {
         state.surveyData.artRatings[currentArtIndex] = rating;
         // document.getElementById("nextArtButton").disabled = false;
-        saveState();
+        // saveState();
       }
 
       function selectPurchaseRating(value){
         state.surveyData.purchaseRatings[currentArtIndex] = value
-        saveState();
+        // saveState();
       }
 
       function nextArt() {
@@ -676,6 +683,7 @@
         if (currentArtIndex < artData.length - 1) {
           currentArtIndex++;
           renderArt();
+          saveState();
         } else {
           submitData();
           goToSection(7);
@@ -692,8 +700,7 @@
         figuresTimeSec: state.timeSpentFigures
       };
     
-      console.log("Отправляемые данные:", JSON.stringify(surveyData), surveyData);
-      return; //TODO: временно
+      console.log("Отправляемые данные:", JSON.stringify(surveyData));
     
       try {
         const response = await fetch("/submit", {
