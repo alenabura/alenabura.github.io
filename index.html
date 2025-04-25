@@ -232,26 +232,26 @@
         >
       </div>
       <div class="radio-group">
-        <p>Насколько вы разбираетесь в искусстве?:</p>
+        <p>Как вы оцениваете свой уровень знаний в области искусства?</p>
         <label>
-          <input type="radio" name="artKnowledge" value="Очень плохо"> 
-          Очень плохо
+          <input type="radio" name="artKnowledge" value="Очень низкий"> 
+          Очень низкий
         </label>
         <label>
-          <input type="radio" name="artKnowledge" value="Плохо"> 
-          Плохо
+          <input type="radio" name="artKnowledge" value="Низкий"> 
+          Низкий
         </label>
         <label>
-          <input type="radio" name="artKnowledge" value="Нормально"> 
-          Нормально
+          <input type="radio" name="artKnowledge" value="Средний"> 
+          Средний
         </label>
         <label>
-          <input type="radio" name="artKnowledge" value="Хорошо"> 
-          Хорошо
+          <input type="radio" name="artKnowledge" value="Высокий"> 
+          Высокий
         </label>
         <label>
-          <input type="radio" name="artKnowledge" value="Очень хорошо"> 
-          Очень хорошо
+          <input type="radio" name="artKnowledge" value="Очень высокий"> 
+          Очень высокий
         </label>
       </div>
 
@@ -689,6 +689,7 @@
           goToSection(7);
           localStorage.removeItem("surveyState");
         }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       }
 
       // Отправка данных
